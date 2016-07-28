@@ -11,13 +11,30 @@ $url = new moodle_url('/course/loginas.php', array('id'=>$id));
 $PAGE->set_url($url);
 
 // Reset user back to their real self if needed, for security reasons you need to log out and log in again.
-if (\core\session\manager::is_loggedinas()) {
-    require_sesskey();
-    require_logout();
+//if (\core\session\manager::is_loggedinas()) {
+//    require_sesskey();
+//    require_logout();
 
     // We can not set wanted URL here because the session is closed.
-    redirect(new moodle_url($url, array('redirect'=>1)));
-}
+//    redirect(new moodle_url($url, array('redirect'=>1)));
+//}
+//KK copied from MDL-24120
+$return = optional_param('return', 0, PARAM_BOOL);   // return to the page we came from
+    if (!empty($USER->realuser)) {
+         if ($return) {
+               $_SESSION['SESSION'] = $_SESSION['REALSESSION'];
+               $_SESSION['USER'] = $_SESSION['REALUSER'];
+
+               unset($_SESSION['REALSESSION']);
+               unset($_SESSION['REALUSER']);
+
+               if ($id and $id != SITEID) {
+                   redirect("$CFG->wwwroot/course/view.php?id=".$id);
+               } else {
+                   redirect("$CFG->wwwroot/");
+               }
+         }
+    }
 
 if ($redirect) {
     if ($id and $id != SITEID) {
@@ -79,9 +96,7 @@ if (has_capability('moodle/user:loginas', $systemcontext)) {
 
 // Login as this user and return to course home page.
 \core\session\manager::loginas($userid, $context);
-// Add a notification to let the logged in as user know that all content will be force cleaned
-// while in this session.
-\core\notification::info(get_string('sessionforceclean', 'core'));
+$oldfullname = fullname($USER, true);
 $newfullname = fullname($USER, true);
 
 $strloginas    = get_string('loginas');
