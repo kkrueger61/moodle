@@ -497,7 +497,7 @@ class comment {
                     'aria-label' => get_string('addcomment')
                 );
                 if (!$this->fullwidth) {
-                    $textareaattrs['cols'] = '20';
+                    $textareaattrs['cols'] = '40';
                 } else {
                     $textareaattrs['class'] = 'fullwidth';
                 }
@@ -882,7 +882,7 @@ class comment {
             $html .= html_writer::empty_tag('input', array('type' => 'hidden', 'name' => 'sesskey',   'value' => sesskey()));
             $html .= html_writer::empty_tag('input', array('type' => 'hidden', 'name' => 'returnurl', 'value' => $PAGE->url));
             // Textarea for the actual comment
-            $html .= html_writer::tag('textarea', '', array('name' => 'content', 'rows' => 2));
+            $html .= html_writer::tag('textarea', '', array('name' => 'content', 'rows' => 4));
             // Submit button to add the comment
             $html .= html_writer::empty_tag('input', array('type' => 'submit', 'value' => get_string('submit')));
             $html .= html_writer::end_tag('form');
