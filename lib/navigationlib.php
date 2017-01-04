@@ -4922,11 +4922,16 @@ class settings_navigation extends navigation_node {
         }
 
         // Change password link.
-        if ($userauthplugin && $currentuser && !\core\session\manager::is_loggedinas() && !isguestuser() &&
+        if ($userauthplugin && $currentuser && !isguestuser() &&
                 has_capability('moodle/user:changeownpassword', $systemcontext) && $userauthplugin->can_change_password()) {
-            $passwordchangeurl = $userauthplugin->change_password_url();
-            if (empty($passwordchangeurl)) {
-                $passwordchangeurl = new moodle_url('/login/change_password.php', array('id'=>$course->id));
+        //KK new files for loginas
+            if(\core\session\manager::is_loggedinas()){
+                $passwordchangeurl = new moodle_url('/login/change_password_loginas.php', array('id'=>$course->id));
+            } else {
+                $passwordchangeurl = $userauthplugin->change_password_url();
+                if (empty($passwordchangeurl)) {
+                    $passwordchangeurl = new moodle_url('/login/change_password.php', array('id'=>$course->id));
+                }
             }
             $useraccount->add(get_string("changepassword"), $passwordchangeurl, self::TYPE_SETTING, null, 'changepassword');
         }
