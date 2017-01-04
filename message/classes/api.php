@@ -297,8 +297,9 @@ class api {
                 $noncontacts[] = helper::create_contact($user);
             }
         }
+        return array($contacts, $courses);
 
-        return array($contacts, $courses, $noncontacts);
+        //KK return array($contacts, $courses, $noncontacts);
     }
 
     /**
