@@ -2731,7 +2731,6 @@ class core_message_external extends external_api {
 
             $user = $newuser;
         }
-
         return $results;
     }
 

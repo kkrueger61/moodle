@@ -170,7 +170,6 @@ function message_search_users($courseids, $searchtext, $sort='', $exceptions='')
     if (!$courseids) {
         $courseids = array(SITEID);
     }
-
     // Allow an integer to be passed.
     if (!is_array($courseids)) {
         $courseids = array($courseids);
