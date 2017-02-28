@@ -136,7 +136,7 @@ if ($mform->is_cancelled()) {
 
     $fullname = fullname($USER, true);
 
-    $PAGE->set_title($strchangepassword);
+    $PAGE->set_title($strpasswordchanged);
     $PAGE->set_heading($COURSE->fullname);
     echo $OUTPUT->header();
 
