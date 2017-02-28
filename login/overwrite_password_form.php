@@ -33,28 +33,15 @@ class login_overwrite_password_form extends moodleform {
     function definition() {
         global $USER, $CFG;
 
-        // Prepare a string showing whether the site wants login password autocompletion to be available to user.
-        if (empty($CFG->loginpasswordautocomplete)) {
-            $autocomplete = 'autocomplete="on"';
-        } else {
-            $autocomplete = '';
-        }
-
         $mform = $this->_form;
         $mform->setDisableShortforms(true);
-        $mform->addElement('header', 'setpassword', get_string('setpassword'), '');
 
-        // Include the username in the form so browsers will recognise that a password is being set.
- $mform->addElement('text', 'username', '', 'style="display: none;" ' . $autocomplete);
-        $mform->setType('username', PARAM_RAW);
-        // Token gives authority to change password.
-        $mform->addElement('hidden', 'token', '');
-        $mform->setType('token', PARAM_ALPHANUM);
+        $mform->addElement('header', 'setpassword', get_string('setpassword'), '');
 
         // visible elements
         $mform->addElement('static', 'username2', get_string('username'), $USER->username);
-
-         $policies = array();
+        
+        $policies = array();
         if (!empty($CFG->passwordpolicy)) {
             $policies[] = print_password_policy();
         }
@@ -65,12 +52,19 @@ class login_overwrite_password_form extends moodleform {
             $mform->addElement('static', 'passwordpolicyinfo', '', implode('<br />', $policies));
         }
 
-        $mform->addElement('password', 'newpassword1', get_string('newpassword'), $autocomplete);
+         //Include the username in the form so browsers will recognise that a password is being set.
+        $mform->addElement('text', 'username', '', 'style="display: none;" ');
+        $mform->setType('username', PARAM_RAW);
+        // Token gives authority to change password.
+        $mform->addElement('hidden', 'token', '');
+        $mform->setType('token', PARAM_ALPHANUM);
+
+
+        $mform->addElement('password', 'newpassword1', get_string('newpassword'));
         $mform->addRule('newpassword1', get_string('required'), 'required', null, 'client');
         $mform->setType('newpassword1', PARAM_RAW);
 
-        $strpasswordagain = get_string('newpassword') . ' (' . get_string('again') . ')';
-        $mform->addElement('password', 'newpassword2', $strpasswordagain, $autocomplete);
+        $mform->addElement('password', 'newpassword2', get_string('newpassword').' ('.get_String('again').')' );
         $mform->addRule('newpassword2', get_string('required'), 'required', null, 'client');
         $mform->setType('newpassword2', PARAM_RAW);
 
