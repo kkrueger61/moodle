@@ -15,20 +15,20 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Questionnaire version information.
+ * Progress block settings
  *
- * @package mod_questionnaire
- * @author  Mike Churchward
- * @author  Joseph Rézeau
- * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package   block_forum_aggregator
+ * @copyright 2014 Tõnis Tartes
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
+defined('MOODLE_INTERNAL') || die;
 
-$plugin->version  = 2016111102;  // The current module version (Date: YYYYMMDDXX)
-$plugin->requires = 2016111500; // Moodle version.
+if ($ADMIN->fulltree) {
 
-$plugin->component = 'mod_questionnaire';
+    $settings->add(new admin_setting_configcolourpicker('block_forum_aggregator/unread_post_color',
+        get_string('unread_post_color', 'block_forum_aggregator'),
+        get_string('unread_post_color_description', 'block_forum_aggregator'), '#FFFACD', null )
+    );
 
-$plugin->release  = '3.2.1 (Build - 2017020200)';
-$plugin->maturity  = MATURITY_STABLE;
+}
