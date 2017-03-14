@@ -13,22 +13,16 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
-
-/**
- * Questionnaire version information.
- *
- * @package mod_questionnaire
- * @author  Mike Churchward
- * @author  Joseph Rézeau
- * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+/*
+ * @package    block
+ * @subpackage forum_aggregator
+ * @author     Tõnis Tartes <t6nis20@gmail.com>
+ * @copyright  1999 onwards Martin Dougiamas  {@link http://moodle.com}
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
-
-$plugin->version  = 2016111102;  // The current module version (Date: YYYYMMDDXX)
-$plugin->requires = 2016111500; // Moodle version.
-
-$plugin->component = 'mod_questionnaire';
-
-$plugin->release  = '3.2.1 (Build - 2017020200)';
+$plugin->version = 2015030200;
+$plugin->requires = 2013101800;
+$plugin->component = 'block_forum_aggregator';
 $plugin->maturity  = MATURITY_STABLE;
+$plugin->release   = "2015030200"; // User-friendly version number
