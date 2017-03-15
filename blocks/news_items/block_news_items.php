@@ -119,8 +119,19 @@ class block_news_items extends block_base {
                          '<div class="head clearfix">'.
                          '<div class="date">'.userdate($discussion->modified, $strftimerecent).'</div>'.
                          '<div class="name">'.fullname($discussion).'</div></div>'.
-                         '<div class="info"><a href="'.$CFG->wwwroot.'/mod/forum/discuss.php?d='.$discussion->discussion.'">'.$discussion->subject.'</a></div>'.
-                         "</li>\n";
+                         '<div class="info"><a href="'.$CFG->wwwroot.'/mod/forum/discuss.php?d='.$discussion->discussion.'">'.$discussion->subject.'</a></div>';
+                          /// KK get posts for Message
+                          $posts = forum_get_all_discussion_posts($discussion->discussion, 'p.modified DESC');
+                          foreach($posts as $post) {
+                               $message = substr(strip_tags($post->message), 0, 300);
+                               $text .= $message. ' ...'.
+                              '<a href="'.$CFG->wwwroot.'/mod/forum/discuss.php?d='.$discussion->discussion.'"> Read more</a> ';
+                               if($post->parent != 0) {
+                                  $text .= '<br />';
+                               }
+                          }
+
+                         $text .= '</li>\n';
             }
             $text .= "</ul>\n";
 
