@@ -437,7 +437,7 @@ class grade_report_grader extends grade_report {
         list($enrolledsql, $enrolledparams) = get_enrolled_sql($this->context, '', 0, $showonlyactiveenrol);
 
         // Fields we need from the user table.
-        $userfields = user_picture::fields('u', get_extra_user_fields($this->context));
+        $userfields = user_picture::fields('u');
 
         // We want to query both the current context and parent contexts.
         list($relatedctxsql, $relatedctxparams) = $DB->get_in_or_equal($this->context->get_parent_context_ids(true), SQL_PARAMS_NAMED, 'relatedctx');
@@ -658,6 +658,7 @@ class grade_report_grader extends grade_report {
         $strgrade     = $this->get_lang_string('grade');
 
         $extrafields = get_extra_user_fields($this->context);
+        $extrafields = array();
 
         $arrows = $this->get_sort_arrows($extrafields);
 
