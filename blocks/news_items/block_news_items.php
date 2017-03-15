@@ -131,7 +131,7 @@ class block_news_items extends block_base {
                                }
                           }
 
-                         $text .= '</li>\n';
+                         $text .= "</li>\n";
             }
             $text .= "</ul>\n";
 
