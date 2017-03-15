@@ -5419,7 +5419,6 @@ class assign {
         //KK if it's a nongraded assignment with no submissions don't show the submissiontable
         if ($this->get_instance()->grade == 0 && !$this->is_any_submission_plugin_enabled()) {
             $o .= $this->view_footer();
-            $this->add_to_log('view', get_string('viewownsubmissionstatus', 'assign'));
             return $o;
         } else {
 
