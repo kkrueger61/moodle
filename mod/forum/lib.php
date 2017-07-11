@@ -3571,13 +3571,19 @@ function forum_print_post($post, $discussion, $forum, &$cm, $course, $ownpost=fa
     if (empty($post->subjectnoformat)) {
         $postsubject = format_string($postsubject);
     }
-    $output .= html_writer::div($postsubject, 'subject', ['role' => 'heading', 'aria-level' => '1', 'id' => ('headp' . $post->id)]);
-
+    $output .= html_writer::div($postsubject, 'subject', ['role' => 'heading', 'aria-level' => '2']);
+   //KK changed for blog sort order 
     if ($authorhidden) {
-        $bytext = userdate_htmltime($post->created);
+        $bytext = userdate($post->modified);
+        if ($forum->type == 'blog') {
+             $bytext = userdate_htmltime($post->created, get_string('strftimedate'));
+        }
     } else {
         $by = new stdClass();
-        $by->date = userdate_htmltime($post->created);
+        $by->date = userdate_htmltime($post->modified);
+        if ($forum->type == 'blog') {
+             $by->date = userdate_htmltime($post->created, get_string('strftimedate'));
+        }
         $by->name = html_writer::link($postuser->profilelink, $postuser->fullname);
         $bytext = get_string('bynameondate', 'forum', $by);
     }
