@@ -104,7 +104,7 @@ class block_forum_aggregator extends block_base {
 
                         //show list                        
                         $text .= html_writer::start_tag('ul', array('class'=> 'unlist'));
-                        $text .= html_writer::tag('li', html_writer::link(new moodle_url('/mod/forum/view.php?id='.$cm->id), $cm->name), array('class' => 'forum_title'));
+                        ///KK $text .= html_writer::tag('li', html_writer::link(new moodle_url('/mod/forum/view.php?id='.$cm->id), $cm->name), array('class' => 'forum_title'));
                         
                         $allnames = get_all_user_name_fields(true, 'u');
                         $posts = $DB->get_records_sql('SELECT d.id, p.*, '.$allnames.', u.email, u.picture, u.imagealt
@@ -112,8 +112,8 @@ class block_forum_aggregator extends block_base {
                                             LEFT JOIN {forum_posts} p ON p.discussion = d.id
                                             LEFT JOIN {user} u ON p.userid = u.id
                                             WHERE d.forum = "'.$key.'"
-                                            ORDER BY p.modified DESC LIMIT 0, '.$max_posts.'');
-                        
+                                            ORDER BY p.created DESC LIMIT 0, '.$max_posts.'');
+                        //KK changed modified into created
                         if (!empty($posts)) {
                             
                             foreach ($posts as $post) {
@@ -126,21 +126,23 @@ class block_forum_aggregator extends block_base {
                                 }
                                 
                                 $post->message = format_string($post->message, true, $COURSE->id);                        
-                                $post->message = shorten_text($post->message, 80, true, '');
+                                $post->message = substr(strip_tags($post->message), 0, 150);
 
                                 $user = $DB->get_record('user', array('id'=>$post->userid), '*', MUST_EXIST);
                                 
                                 $text .= html_writer::start_tag('li', $post_style).
                                          html_writer::start_tag('div', array('class' => 'head')).
-                                         html_writer::tag('div', $post->subject, array('class' => 'subject')).
-                                         html_writer::tag('div', $OUTPUT->user_picture($user, array('size'=>21, 'class'=>'userpostpic')), array('class' => 'userpic')).
-                                         html_writer::tag('div', fullname($post), array('class' => 'name')).
-                                         html_writer::tag('div', get_string('posted', 'block_forum_aggregator').userdate($post->modified, $strftimerecent), array('class' => 'date')).
-                                         html_writer::end_tag('div').
+                                         html_writer::tag('div', $OUTPUT->user_picture($user, array('size'=>40, 'class'=>'userpostpic')), array('class' => 'userpic'));
+                                $text .= '<div class="subject">';
+                                $text .=  html_writer::link(new moodle_url('/mod/forum/discuss.php?d='.$post->discussion.'#p'.$post->id), $post->subject);
+                                $text .= html_writer::end_tag('div').
                                          html_writer::start_tag('div').
-                                         $post->message.' '.
-                                         html_writer::link(new moodle_url('/mod/forum/discuss.php?d='.$post->discussion.'#p'.$post->id), $strmore.'...' , array('class' => 'postreadmore')).
+                                         '<span class="name">'.fullname($post).' | </span><span class="date">'.userdate($post->created, $strftimerecent).'</span>'.
+                                         //html_writer::tag('div', fullname($post), array('class' => 'name')).
+                                         //html_writer::tag('div', userdate($post->created, $strftimerecent), array('class' => 'date')).
                                          html_writer::end_tag('div').
+                                         $post->message.' ... '.
+                                         html_writer::link(new moodle_url('/mod/forum/discuss.php?d='.$post->discussion.'#p'.$post->id), $strmore.'...' , array('class' => 'postreadmore')).
                                          html_writer::end_tag('li');
                             }
                         } else {
