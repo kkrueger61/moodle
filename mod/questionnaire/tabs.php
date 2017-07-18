@@ -38,7 +38,7 @@ $currenttab = $SESSION->questionnaire->current_tab;
 // In a questionnaire instance created "using" a PUBLIC questionnaire, prevent anyone from editing settings, editing questions,
 // viewing all responses...except in the course where that PUBLIC questionnaire was originally created.
 
-$owner = !empty($questionnaire->sid) && (trim($questionnaire->survey->owner) == trim($questionnaire->course->id));
+$owner = !empty($questionnaire->sid) && ($questionnaire->survey->courseid == $questionnaire->course->id);
 if ($questionnaire->capabilities->manage  && $owner) {
     $row[] = new tabobject('settings', $CFG->wwwroot.htmlspecialchars('/mod/questionnaire/qsettings.php?'.
             'id='.$questionnaire->cm->id), get_string('advancedsettings'));
@@ -178,6 +178,7 @@ if (($canviewallgroups || ($canviewgroups && $questionnaire->capabilities->reada
 
     }
 } else if ($canviewgroups && $questionnaire->capabilities->readallresponses && ($numresp > 0) && $canviewgroups &&
+           // If resp_view is set to QUESTIONNAIRE_STUDENTVIEWRESPONSES_NEVER, then this will always be false.
            ($questionnaire->resp_view == QUESTIONNAIRE_STUDENTVIEWRESPONSES_ALWAYS ||
             ($questionnaire->resp_view == QUESTIONNAIRE_STUDENTVIEWRESPONSES_WHENCLOSED
                 && $questionnaire->is_closed()) ||
