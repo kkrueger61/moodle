@@ -189,9 +189,7 @@ class format_topcoll_renderer extends format_section_renderer_base {
                             $section->section, array('title' => $title, 'class' => 'cps_centre'));
                         break;
                     default:
-                        $o .= html_writer::link($url,
-                            $this->output->pix_icon('one_section', $title, 'format_topcoll'),
-                            array('title' => $title, 'class' => 'cps_centre'));
+                        $o .= "";
                         break;
                 }
             }
