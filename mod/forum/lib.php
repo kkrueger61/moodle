@@ -5522,7 +5522,8 @@ function forum_user_can_see_post($forum, $discussion, $post, $user = null, $cm =
             return true;
         }
         $userfirstpost = forum_get_user_posted_time($discussion->id, $user->id);
-        return (($userfirstpost !== false && (time() - $userfirstpost >= $CFG->maxeditingtime)));
+        //KK return (($userfirstpost !== false && (time() - $userfirstpost >= $CFG->maxeditingtime)));
+        return (($userfirstpost !== false));
     }
     return true;
 }
