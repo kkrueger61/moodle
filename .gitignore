@@ -44,3 +44,11 @@ composer.phar
 /lib/yuilib/*/*/*-coverage.js
 atlassian-ide-plugin.xml
 /node_modules/
+/theme/explorarium
+/theme/lernwerkstatt
+/theme/adaptable
+/theme/adaptable/
+/theme/lambda/
+/theme/lifebildungsnetz/
+/theme/teachaboutus/
+
