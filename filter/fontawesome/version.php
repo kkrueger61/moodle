@@ -1,5 +1,4 @@
 <?php
-
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -26,8 +25,8 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2016111700;            // The current plugin version (Date: YYYYMMDDXX)
-$plugin->maturity = MATURITY_STABLE;        // this version's maturity level.
-$plugin->release = '4.7 (Build: 20161117)';
-$plugin->requires  = 2013050100;           // Requires this Moodle version
-$plugin->component = 'filter_fontawesome'; // Full name of the plugin (used for diagnostics)
+$plugin->version   = 2019022700;            // The current plugin version (Date: YYYYMMDDXX).
+$plugin->maturity = MATURITY_STABLE;        // This version's maturity level.
+$plugin->release = '4.8.3 (Build: 20190227)';
+$plugin->requires  = 2018051700;           // Requires this Moodle version.
+$plugin->component = 'filter_fontawesome'; // Full name of the plugin (used for diagnostics).
