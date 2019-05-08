@@ -1248,7 +1248,8 @@ class flexible_table {
                             $helpicon = $OUTPUT->render($this->helpforheaders[$index]);
                             $this->headers[$index] = substr($this->headers[$index], 0, -3). $helpicon;
                         }
-                }
+		    }
+	        }	    
                 break;
 
                 case 'userpic':
