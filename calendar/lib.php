@@ -105,6 +105,11 @@ define('CALENDAR_IMPORT_FROM_FILE', 0);
 define('CALENDAR_IMPORT_FROM_URL',  1);
 
 /**
+ * CALENDAR_IMPORT_EVENT_UPDATED_SKIPPED - imported event was skipped
+ */
+define('CALENDAR_IMPORT_EVENT_SKIPPED',  -1);
+
+/**
  * CALENDAR_IMPORT_EVENT_UPDATED - imported event was updated
  */
 define('CALENDAR_IMPORT_EVENT_UPDATED',  1);
@@ -2862,11 +2867,23 @@ function calendar_add_icalendar_event($event, $unused = null, $subscriptionid, $
 
     if ($updaterecord = $DB->get_record('event', array('uuid' => $eventrecord->uuid,
         'subscriptionid' => $eventrecord->subscriptionid))) {
-        $eventrecord->id = $updaterecord->id;
-        $return = CALENDAR_IMPORT_EVENT_UPDATED; // Update.
+
+        // Compare iCal event data against the moodle event to see if something has changed.
+        $result = array_diff((array) $eventrecord, (array) $updaterecord);
+
+        // Unset timemodified field because it's always going to be different.
+        unset($result['timemodified']);
+
+        if (count($result)) {
+            $eventrecord->id = $updaterecord->id;
+            $return = CALENDAR_IMPORT_EVENT_UPDATED; // Update.
+        } else {
+            return CALENDAR_IMPORT_EVENT_SKIPPED;
+        }
     } else {
         $return = CALENDAR_IMPORT_EVENT_INSERTED; // Insert.
     }
+
     if ($createdevent = \calendar_event::create($eventrecord, false)) {
         if (!empty($event->properties['RRULE'])) {
             // Repeating events.
@@ -3000,16 +3017,11 @@ function calendar_import_icalendar_events($ical, $unused = null, $subscriptionid
     $return = '';
     $eventcount = 0;
     $updatecount = 0;
+    $skippedcount = 0;
 
     // Large calendars take a while...
     if (!CLI_SCRIPT) {
         \core_php_time_limit::raise(300);
-    }
-
-    // Mark all events in a subscription with a zero timestamp.
-    if (!empty($subscriptionid)) {
-        $sql = "UPDATE {event} SET timemodified = :time WHERE subscriptionid = :id";
-        $DB->execute($sql, array('time' => 0, 'id' => $subscriptionid));
     }
 
     // Grab the timezone from the iCalendar file to be used later.
@@ -3019,8 +3031,9 @@ function calendar_import_icalendar_events($ical, $unused = null, $subscriptionid
         $timezone = 'UTC';
     }
 
-    $return = '';
+    $icaluuids = [];
     foreach ($ical->components['VEVENT'] as $event) {
+        $icaluuids[] = $event->properties['UID'][0]->value;
         $res = calendar_add_icalendar_event($event, null, $subscriptionid, $timezone);
         switch ($res) {
             case CALENDAR_IMPORT_EVENT_UPDATED:
@@ -3028,6 +3041,9 @@ function calendar_import_icalendar_events($ical, $unused = null, $subscriptionid
                 break;
             case CALENDAR_IMPORT_EVENT_INSERTED:
                 $eventcount++;
+                break;
+            case CALENDAR_IMPORT_EVENT_SKIPPED:
+                $skippedcount++;
                 break;
             case 0:
                 $return .= '<p>' . get_string('erroraddingevent', 'calendar') . ': ';
@@ -3041,18 +3057,27 @@ function calendar_import_icalendar_events($ical, $unused = null, $subscriptionid
         }
     }
 
-    $return .= "<p>" . get_string('eventsimported', 'calendar', $eventcount) . "</p> ";
-    $return .= "<p>" . get_string('eventsupdated', 'calendar', $updatecount) . "</p>";
-
-    // Delete remaining zero-marked events since they're not in remote calendar.
     if (!empty($subscriptionid)) {
-        $deletecount = $DB->count_records('event', array('timemodified' => 0, 'subscriptionid' => $subscriptionid));
-        if (!empty($deletecount)) {
-            $DB->delete_records('event', array('timemodified' => 0, 'subscriptionid' => $subscriptionid));
-            $return .= "<p> " . get_string('eventsdeleted', 'calendar') . ": {$deletecount} </p>\n";
+        $eventsuuids = $DB->get_records_menu('event', ['subscriptionid' => $subscriptionid], '', 'id, uuid');
+
+        $icaleventscount = count($icaluuids);
+        $tobedeleted = [];
+        if (count($eventsuuids) > $icaleventscount) {
+            foreach ($eventsuuids as $eventid => $eventuuid) {
+                if (!in_array($eventuuid, $icaluuids)) {
+                    $tobedeleted[] = $eventid;
+                }
+            }
+            if (!empty($tobedeleted)) {
+                $DB->delete_records_list('event', 'id', $tobedeleted);
+                $return .= "<p> " . get_string('eventsdeleted', 'calendar') . ": " . count($tobedeleted) . "</p> ";
+            }
         }
     }
 
+    $return .= "<p>" . get_string('eventsimported', 'calendar', $eventcount) . "</p> ";
+    $return .= "<p>" . get_string('eventsskipped', 'calendar', $skippedcount) . "</p> ";
+    $return .= "<p>" . get_string('eventsupdated', 'calendar', $updatecount) . "</p>";
     return $return;
 }
 
@@ -3234,10 +3259,12 @@ function core_calendar_user_preferences() {
  *                              or events in progress/already started selected as well
  * @param boolean $ignorehidden whether to select only visible events or all events
  * @param array $categories array of category ids and/or objects.
+ * @param int $limitnum Number of events to fetch or zero to fetch all.
+ *
  * @return array $events of selected events or an empty array if there aren't any (or there was an error)
  */
 function calendar_get_legacy_events($tstart, $tend, $users, $groups, $courses,
-        $withduration = true, $ignorehidden = true, $categories = []) {
+        $withduration = true, $ignorehidden = true, $categories = [], $limitnum = 0) {
     // Normalise the users, groups and courses parameters so that they are compliant with \core_calendar\local\api::get_events().
     // Existing functions that were using the old calendar_get_events() were passing a mixture of array, int, boolean for these
     // parameters, but with the new API method, only null and arrays are accepted.
@@ -3274,7 +3301,7 @@ function calendar_get_legacy_events($tstart, $tend, $users, $groups, $courses,
         null,
         null,
         null,
-        40,
+        $limitnum,
         null,
         $userparam,
         $groupparam,
@@ -3309,7 +3336,7 @@ function calendar_get_view(\calendar_information $calendar, $view, $includenavig
     $calendardate = $type->timestamp_to_date_array($calendar->time);
 
     $date = new \DateTime('now', core_date::get_user_timezone_object(99));
-    $eventlimit = 200;
+    $eventlimit = 0;
 
     if ($view === 'day') {
         $tstart = $type->convert_to_timestamp($calendardate['year'], $calendardate['mon'], $calendardate['mday']);
@@ -3493,7 +3520,7 @@ function calendar_output_fragment_event_form($args) {
         $eventtypes = calendar_get_allowed_event_types($courseid);
 
         // If the user is on course context and is allowed to add course events set the event type default to course.
-        if ($courseid != SITEID && !empty($eventtypes['course'])) {
+        if (!empty($courseid) && !empty($eventtypes['course'])) {
             $data['eventtype'] = 'course';
             $data['courseid'] = $courseid;
             $data['groupcourseid'] = $courseid;
@@ -3679,7 +3706,7 @@ function calendar_get_allowed_event_types(int $courseid = null) {
 
         $types['user'] = has_capability('moodle/calendar:manageownentries', $context);
 
-        if (has_capability('moodle/calendar:manageentries', $context) || !empty($CFG->calendar_adminseesall)) {
+        if (has_capability('moodle/calendar:manageentries', $context)) {
             $types['course'] = true;
 
             $types['group'] = (!empty($groups) && has_capability('moodle/site:accessallgroups', $context))

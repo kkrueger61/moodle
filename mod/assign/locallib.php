@@ -3407,7 +3407,8 @@ class assign {
                     $prefix = str_replace('_', ' ', $groupname . get_string('participant', 'assign'));
                     $prefix = clean_filename($prefix . '_' . $this->get_uniqueid_for_user($userid));
                 } else {
-                    $prefix = str_replace('_', ' ', $groupname . fullname($student));
+                    $fullname = fullname($student, has_capability('moodle/site:viewfullnames', $this->get_context()));
+                    $prefix = str_replace('_', ' ', $groupname . $fullname);
                     $prefix = clean_filename($prefix . '_' . $this->get_uniqueid_for_user($userid));
                 }
 
@@ -5364,7 +5365,7 @@ class assign {
                                                   $this->is_any_submission_plugin_enabled(),
                                                   $this->count_submissions_with_status($submitted, $activitygroup),
                                                   $instance->cutoffdate,
-                                                  $instance->duedate,
+                                                  $this->get_duedate($activitygroup),
                                                   $this->get_course_module()->id,
                                                   $this->count_submissions_need_grading($activitygroup),
                                                   $instance->teamsubmission,
@@ -5380,7 +5381,7 @@ class assign {
                                                   $this->is_any_submission_plugin_enabled(),
                                                   $this->count_submissions_with_status($submitted, $activitygroup),
                                                   $instance->cutoffdate,
-                                                  $instance->duedate,
+                                                  $this->get_duedate($activitygroup),
                                                   $this->get_course_module()->id,
                                                   $this->count_submissions_need_grading($activitygroup),
                                                   $instance->teamsubmission,
@@ -5390,6 +5391,29 @@ class assign {
         }
 
         return $summary;
+    }
+
+    /**
+     * Return group override duedate.
+     *
+     * @param int $activitygroup Activity active group
+     * @return int $duedate
+     */
+    private function  get_duedate($activitygroup = null) {
+        global $DB;
+
+        if ($activitygroup === null) {
+            $activitygroup = groups_get_activity_group($this->get_course_module());
+        }
+
+        if ($this->can_view_grades()) {
+            $params = array('groupid' => $activitygroup, 'assignid' => $this->get_instance()->id);
+            $groupoverride = $DB->get_record('assign_overrides', $params);
+            if (!empty($groupoverride->duedate)) {
+                return $groupoverride->duedate;
+            }
+        }
+        return $this->get_instance()->duedate;
     }
 
     /**
@@ -7412,6 +7436,14 @@ class assign {
             $options = array('' => get_string('markingworkflowstatenotmarked', 'assign')) + $states;
             $mform->addElement('select', 'workflowstate', get_string('markingworkflowstate', 'assign'), $options);
             $mform->addHelpButton('workflowstate', 'markingworkflowstate', 'assign');
+            $gradingstatus = $this->get_grading_status($userid);
+            if ($gradingstatus != ASSIGN_MARKING_WORKFLOW_STATE_RELEASED) {
+                if ($grade->grade && $grade->grade != -1) {
+                    $assigngradestring = html_writer::span(grade_floatval($grade->grade), 'currentgrade');
+                    $label = get_string('currentassigngrade', 'assign');
+                    $mform->addElement('static', 'currentassigngrade', $label, $assigngradestring);
+                }
+            }
         }
 
         if ($this->get_instance()->markingworkflow &&
@@ -7433,6 +7465,7 @@ class assign {
             $mform->disabledIf('allocatedmarker', 'workflowstate', 'eq', ASSIGN_MARKING_WORKFLOW_STATE_READYFORRELEASE);
             $mform->disabledIf('allocatedmarker', 'workflowstate', 'eq', ASSIGN_MARKING_WORKFLOW_STATE_RELEASED);
         }
+
         $gradestring = '<span class="currentgrade">' . $gradestring . '</span>';
         $mform->addElement('static', 'currentgrade', get_string('currentgrade', 'assign'), $gradestring);
 
@@ -7807,14 +7840,14 @@ class assign {
 
                 // Will not apply update if user does not have permission to assign this workflow state.
                 if (!$gradingdisabled && $this->update_user_flags($flags)) {
-                    if ($state == ASSIGN_MARKING_WORKFLOW_STATE_RELEASED) {
-                        // Update Gradebook.
-                        $assign = clone $this->get_instance();
-                        $assign->cmidnumber = $this->get_course_module()->idnumber;
-                        // Set assign gradebook feedback plugin status.
-                        $assign->gradefeedbackenabled = $this->is_gradebook_feedback_enabled();
-                        assign_update_grades($assign, $userid);
-                    }
+                    // Update Gradebook.
+                    $grade = $this->get_user_grade($userid, true);
+                    $this->update_grade($grade);
+                    $assign = clone $this->get_instance();
+                    $assign->cmidnumber = $this->get_course_module()->idnumber;
+                    // Set assign gradebook feedback plugin status.
+                    $assign->gradefeedbackenabled = $this->is_gradebook_feedback_enabled();
+                    assign_update_grades($assign, $userid);
 
                     $user = $DB->get_record('user', array('id' => $userid), '*', MUST_EXIST);
                     \mod_assign\event\workflow_state_updated::create_from_user($this, $user, $state)->trigger();
