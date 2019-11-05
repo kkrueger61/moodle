@@ -4,6 +4,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.0-r1] - 2019-09-25
+### Changed
+- Updated the PHPunit testcase to support different FA styles (fas, far, fal, fad)
+- Alter regex to match different FA styles
+- Updated version number to `5.x` 
+
+## [4.8.5] - 2019-05-22
+### Added
+- New branch `MOODLE_37_STABLE`
+- Plugin icon
+- PHPUnit tests
+
+### Changed
+- Improve PHPDocs
+- Update `filter.php`: move callback function inside filter class
+- Rename `filtersettings.php` to `settings.php`
+
 ## [4.8.4] - 2019-04-05
 ### Added
 - The filter supports now brands. Please add at the beginning `fab` inside the square brackets.

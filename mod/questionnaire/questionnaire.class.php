@@ -1887,7 +1887,7 @@ class questionnaire {
                 $choices = [];
                 $cids = [];
                 foreach ($question->choices as $cid => $choice) {
-                    if (!empty($choice->value)) {
+                    if (!empty($choice->value) && (strpos($choice->content, '=') !== false)) {
                         $choices[$choice->value] = substr($choice->content, (strpos($choice->content, '=') + 1));
                     } else {
                         $cids[$rqid . '_' . $cid] = $choice->content;
@@ -3117,7 +3117,8 @@ class questionnaire {
                     $content = $choicesbyqid[$qid][$responserow->choice_id]->content;
                     if (preg_match('/^!other/', $content)) {
                         // If this has an "other" text, use it.
-                        $responsetxt = preg_replace(["/^!other=/", "/^!other/"], ['', get_string('other', 'questionnaire')], $content);
+                        $responsetxt = preg_replace(["/^!other=/", "/^!other/"],
+                            ['', get_string('other', 'questionnaire')], $content);
                         $responsetxt1 = $responserow->response;
                     } else if (($choicecodes == 1) && ($choicetext == 1)) {
                         $responsetxt = $c.' : '.$content;
