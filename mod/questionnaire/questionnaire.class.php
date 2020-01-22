@@ -1157,19 +1157,23 @@ class questionnaire {
             $this->survey_render($formdata->sec, $msg, $formdata);
             $controlbuttons = [];
             if ($formdata->sec > 1) {
-                $controlbuttons['prev'] = ['type' => 'submit', 'value' => '<< '.get_string('previouspage', 'questionnaire')];
+                $controlbuttons['prev'] = ['type' => 'submit', 'class' => 'btn btn-secondary',
+                    'value' => '<< '.get_string('previouspage', 'questionnaire')];
             }
             if ($this->resume) {
-                $controlbuttons['resume'] = ['type' => 'submit', 'value' => get_string('save', 'questionnaire')];
+                $controlbuttons['resume'] = ['type' => 'submit', 'class' => 'btn btn-secondary',
+                    'value' => get_string('save', 'questionnaire')];
             }
 
             // Add a 'hidden' variable for the mod's 'view.php', and use a language variable for the submit button.
 
             if ($formdata->sec == $numsections) {
                 $controlbuttons['submittype'] = ['type' => 'hidden', 'value' => 'Submit Survey'];
-                $controlbuttons['submit'] = ['type' => 'submit', 'value' => get_string('submitsurvey', 'questionnaire')];
+                $controlbuttons['submit'] = ['type' => 'submit', 'class' => 'btn btn-primary',
+                    'value' => get_string('submitsurvey', 'questionnaire')];
             } else {
-                $controlbuttons['next'] = ['type' => 'submit', 'value' => get_string('nextpage', 'questionnaire').' >>'];
+                $controlbuttons['next'] = ['type' => 'submit', 'class' => 'btn btn-secondary',
+                    'value' => get_string('nextpage', 'questionnaire').' >>'];
             }
             $this->page->add_to_page('controlbuttons', $this->renderer->complete_controlbuttons($controlbuttons));
         } else {
@@ -2068,10 +2072,10 @@ class questionnaire {
                         $cid = substr($rqid, (strpos($rqid, '_') + 1));
                         if (isset($this->responses[$rid]->answers[$question->id][$cid])) {
                             if (isset($question->choices[$cid]) &&
-                                isset($choices[$this->responses[$rid]->answers[$question->id][$cid]->value + 1])) {
-                                $rating = $choices[$this->responses[$rid]->answers[$question->id][$cid]->value + 1];
+                                isset($choices[$this->responses[$rid]->answers[$question->id][$cid]->value])) {
+                                $rating = $choices[$this->responses[$rid]->answers[$question->id][$cid]->value];
                             } else {
-                                $rating = $this->responses[$rid]->answers[$question->id][$cid]->value + 1;
+                                $rating = $this->responses[$rid]->answers[$question->id][$cid]->value;
                             }
                             $response->answers[] = $question->choices[$cid]->content . ' = ' . $rating;
                         }
@@ -2325,14 +2329,12 @@ class questionnaire {
             $currentgroupid = 0;
         }
         if ($this->capabilities->readownresponses) {
-            $this->page->add_to_page('message',
-                ('<a href="'.$CFG->wwwroot.'/mod/questionnaire/myreport.php?id='.
-                    $this->cm->id.'&amp;instance='.$this->cm->instance.'&amp;user='.$USER->id.'&byresponse=0&action=vresp">'.
-                    get_string("continue").'</a>'));
+            $url = new moodle_url('myreport.php', ['id' => $this->cm->id, 'instance' => $this->cm->instance, 'user' => $USER->id,
+                'byresponse' => 0, 'action' => 'vresp']);
+            $this->page->add_to_page('continue', $this->renderer->single_button($url, get_string('continue')));
         } else {
-            $this->page->add_to_page('message',
-                ('<a href="'.$CFG->wwwroot.'/course/view.php?id='.$this->course->id.'">'.
-                    get_string("continue").'</a>'));
+            $url = new moodle_url('/course/view.php', ['id' => $this->course->id]);
+            $this->page->add_to_page('continue', $this->renderer->single_button($url, get_string('continue')));
         }
         return;
     }
@@ -3237,7 +3239,7 @@ class questionnaire {
                 $key = $qid.'_'.$responserow->choice_id;
                 $position = $questionpositions[$key];
                 if ($qtype === QUESRATE) {
-                    $choicetxt = $responserow->rankvalue + 1;
+                    $choicetxt = $responserow->rankvalue;
                 } else {
                     $content = $choicesbyqid[$qid][$responserow->choice_id]->content;
                     if (\mod_questionnaire\question\choice\choice::content_is_other_choice($content)) {
@@ -3296,6 +3298,7 @@ class questionnaire {
                 $row[$position] = $responsetxt;
                 // Check for "other" text and set it to the next position if present.
                 if (!empty($responsetxt1)) {
+                    $responsetxt1 = preg_replace("/[\r\n\t]/", ' ', $responsetxt1);
                     $row[$position + 1] = $responsetxt1;
                     unset($responsetxt1);
                 }
@@ -3393,10 +3396,16 @@ class questionnaire {
 
         $action = optional_param('action', 'vall', PARAM_ALPHA);
 
-        if ($resp = $DB->get_record('questionnaire_response', ['id' => $rid]) ) {
+        $resp = $DB->get_record('questionnaire_response', ['id' => $rid]);
+        if (!empty($resp)) {
             $userid = $resp->userid;
-            if ($user = $DB->get_record('user', ['id' => $userid])) {
-                $ruser = fullname($user);
+            $user = $DB->get_record('user', ['id' => $userid]);
+            if (!empty($user)) {
+                if ($this->respondenttype == 'anonymous') {
+                    $ruser = '- ' . get_string('anonymous', 'questionnaire') . ' -';
+                } else {
+                    $ruser = fullname($user);
+                }
             }
         }
         // Available group modes (0 = no groups; 1 = separate groups; 2 = visible groups).

@@ -164,7 +164,7 @@ class renderer extends \plugin_renderer_base {
         $output = '';
         if (is_array($inputs)) {
             foreach ($inputs as $name => $attributes) {
-                $output .= \html_writer::empty_tag('input', array_merge(['name' => $name], $attributes));
+                $output .= \html_writer::empty_tag('input', array_merge(['name' => $name], $attributes)) . ' ';
             }
         } else if (is_string($inputs)) {
             $output .= \html_writer::tag('p', $inputs);
@@ -326,9 +326,9 @@ class renderer extends \plugin_renderer_base {
     public function print_preview_formend($url, $submitstr, $resetstr) {
         $output = '';
         $output .= \html_writer::start_tag('div');
-        $output .= \html_writer::empty_tag('input', ['type' => 'submit', 'name' => 'submit', 'value' => $submitstr]);
+        $output .= \html_writer::empty_tag('input', ['type' => 'submit', 'name' => 'submit', 'value' => $submitstr, 'class' => 'btn btn-primary']);
         $output .= ' ';
-        $output .= \html_writer::tag('a', $resetstr, ['href' => $url]);
+        $output .= \html_writer::tag('a', $resetstr, ['href' => $url, 'class' => 'btn btn-secondary mr-1']);
         $output .= \html_writer::end_tag('div') . "\n";
         $output .= \html_writer::end_tag('form') . "\n";
         return $output;
@@ -343,7 +343,7 @@ class renderer extends \plugin_renderer_base {
     public function homelink($url, $text) {
         $output = '';
         $output .= \html_writer::start_tag('div', ['class' => 'homelink']);
-        $output .= \html_writer::tag('a', $text, ['href' => $url]);
+        $output .= \html_writer::tag('a', $text, ['href' => $url, 'class' => 'btn btn-primary']);
         $output .= \html_writer::end_tag('div');
         return $output;
     }
