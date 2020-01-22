@@ -153,8 +153,6 @@ class rank extends responsetype {
             $rsql = ' AND response_id ' . $rsql;
         }
 
-        // JR there can't be an !other field in rating questions ???
-        $rankvalue = [];
         $select = 'question_id=' . $this->question->id . ' AND content NOT LIKE \'!other%\' ORDER BY id ASC';
         if ($rows = $DB->get_records_select('questionnaire_quest_choice', $select)) {
             foreach ($rows as $row) {
@@ -162,11 +160,13 @@ class rank extends responsetype {
                 $nbna = $DB->count_records(static::response_table(), array('question_id' => $this->question->id,
                                 'choice_id' => $row->id, 'rankvalue' => '-1'));
                 $this->counts[$row->content]->nbna = $nbna;
-                // The $row->value may be null (i.e. empty) or have a 'NULL' value.
-                if (($row->value !== null) && ($row->value !== 'NULL') && ($row->value !== '')) {
-                    $rankvalue[] = $row->value;
-                }
             }
+        }
+
+        // For nameddegrees, need an array by degree value of positions (zero indexed).
+        $rankvalue = [];
+        if (!empty($this->question->nameddegrees)) {
+            $rankvalue = array_flip(array_keys($this->question->nameddegrees));
         }
 
         $isrestricted = ($this->question->length < count($this->question->choices)) && $this->question->no_duplicate_choices();
@@ -180,12 +180,14 @@ class rank extends responsetype {
                 AND r.rankvalue >= 0{$rsql}
                 ORDER BY choiceid";
                 $results = $DB->get_records_sql($sql, $params);
-                $value = array();
+                $value = [];
                 foreach ($results as $result) {
-                    if (isset ($value[$result->choiceid])) {
-                        $value[$result->choiceid] += $rankvalue[$result->rankvalue];
-                    } else {
-                        $value[$result->choiceid] = $rankvalue[$result->rankvalue];
+                    if (isset($rankvalue[$result->rankvalue])) {
+                        if (isset ($value[$result->choiceid])) {
+                            $value[$result->choiceid] += $rankvalue[$result->rankvalue] + 1;
+                        } else {
+                            $value[$result->choiceid] = $rankvalue[$result->rankvalue] + 1;
+                        }
                     }
                 }
             }
@@ -193,7 +195,7 @@ class rank extends responsetype {
             $sql = "SELECT c.id, c.content, a.average, a.num
                     FROM {questionnaire_quest_choice} c
                     INNER JOIN
-                         (SELECT c2.id, AVG(a2.rankvalue+1) AS average, COUNT(a2.response_id) AS num
+                         (SELECT c2.id, AVG(a2.rankvalue) AS average, COUNT(a2.response_id) AS num
                           FROM {questionnaire_quest_choice} c2, {".static::response_table()."} a2
                           WHERE c2.question_id = ? AND a2.question_id = ? AND a2.choice_id = c2.id AND a2.rankvalue >= 0{$rsql}
                           GROUP BY c2.id) a ON a.id = c.id
@@ -201,7 +203,9 @@ class rank extends responsetype {
             $results = $DB->get_records_sql($sql, array_merge(array($this->question->id, $this->question->id), $params));
             if (!empty ($rankvalue)) {
                 foreach ($results as $key => $result) {
-                    $result->averagevalue = $value[$key] / $result->num;
+                    if (isset($value[$key])) {
+                        $result->averagevalue = $value[$key] / $result->num;
+                    }
                 }
             }
             // Reindex by 'content'. Can't do this from the query as it won't work with MS-SQL.
@@ -215,7 +219,7 @@ class rank extends responsetype {
             $sql = "SELECT c.id, c.content, a.sum, a.num
                     FROM {questionnaire_quest_choice} c
                     INNER JOIN
-                         (SELECT c2.id, SUM(a2.rankvalue+1) AS sum, COUNT(a2.response_id) AS num
+                         (SELECT c2.id, SUM(a2.rankvalue) AS sum, COUNT(a2.response_id) AS num
                           FROM {questionnaire_quest_choice} c2, {".static::response_table()."} a2
                           WHERE c2.question_id = ? AND a2.question_id = ? AND a2.choice_id = c2.id AND a2.rankvalue >= 0{$rsql}
                           GROUP BY c2.id) a ON a.id = c.id";
@@ -313,10 +317,10 @@ class rank extends responsetype {
                 $this->counts[$ccontent]->avgvalue = $avgvalue;
             }
             $output .= \mod_questionnaire\responsetype\display_support::mkresavg($this->counts, count($rids),
-                $this->question->choices, $this->question->precise, $prtotal, $this->question->length, $sort, $stravgvalue);
+                $this->question, $prtotal, $sort, $stravgvalue);
 
             $output .= \mod_questionnaire\responsetype\display_support::mkrescount($this->counts, $rids, $rows, $this->question,
-                $this->question->precise, $this->question->length, $sort);
+                $sort);
         } else {
             $output .= '<p class="generaltable">&nbsp;'.get_string('noresponsedata', 'questionnaire').'</p>';
         }
