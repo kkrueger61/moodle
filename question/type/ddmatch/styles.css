@@ -1,3 +1,7 @@
+#page-question-type-ddmatch div.editor_atto_content_wrap {
+    word-break: break-all;
+}
+
 .ddmatch li {
     margin: 6px;
     padding: 4px;
@@ -5,9 +9,15 @@
 
 .ddmatch li.matchdrag {
     background-color: white;
-    border: 1px solid black;
+    border: 1px solid #908b8b;
+    padding: 10px;
+    font-size: 15px;
+    color: #333;
+    line-height:20px;
 }
-
+.ddmatch tr {
+    word-break: break-all;
+}
 .ddmatch li.placeholder {
     border: 1px dotted black;
     text-align: center;
@@ -17,9 +27,11 @@
     border: 1px solid gray;
     float: right;
     list-style: none;
-    margin: 6px;
+    margin: 0;
     padding: 4px;
     width: 35%;
+    max-height:380px;
+    overflow-y:auto;
 }
 
 .ddmatch .matchorigin li {
@@ -29,9 +41,8 @@
 .ddmatch .matchtarget {
     border: 1px solid black;
     list-style: none;
-    margin: 6px;
-    min-height: 30px;
-    padding: 4px;
+    margin: 0;
+    padding: 0;
     width: 100%;
 }
 
@@ -42,25 +53,31 @@
 .ddmatch li p {
     display: table-cell;
     vertical-align: middle;
+        word-break: break-word;
 }
 
 .ddmatch ul.matchdefault {
-    border: 2px solid gray;
+    border: 1px solid gray;
+}
+.ddmatch .que .formulation{
+    background:#f1f1f1 !Important;
+    padding:20px !Important;
 }
 
 .ddmatch td.text {
-    width: 25%;
+    width: 50%;
+    padding:0;
 }
 .ddmatch td.control {
-    margin: 6px;
-    padding: 4px;
-    width: 75%;
+    width: 85%;
+    margin-left: 15px;
+    margin-right: 15px;
 }
 
 .ddmatch table.answer {
     float: left;
     margin-bottom: 0.5em;
-    width: 60%;
+    width: 100%;
 }
 
 .ddmatch .correctanswertable {
@@ -75,7 +92,7 @@
     border: 2px dotted green;
 }
 
-.matchtarget .placeholder.hidden {
+.ddmatch .matchtarget .placeholder.hidden {
     display: none;
 }
 
@@ -106,4 +123,57 @@ body#page-question-type-ddmatch div[id^=fitem_id_][id*=subanswers_] {
     margin-top: 0;
     padding-bottom: 5px;
     padding-top: 5px;
+}
+.ddmatch .divanswer {
+    max-height: 380px;
+    overflow-y:auto;
+    width: 60%;
+    float: left;
+}
+.ddmatch .qtext{margin-bottom:0;}
+.ddmatch .qtext p{margin:0;}
+.ddmatch .qtext p br{display:none;}
+.ddmatch .divanswer .answer .visibleifjs{display:inline-block !important; margin-bottom:5px;}
+.ddmatch p{
+    font-size: 15px !Important;
+    word-break: break-word;
+    line-height: 20px;
+    color: #333;
+}
+.ddmatch .text {
+    font-size: 15px !Important;
+    word-break: break-word;
+    line-height: 20px;
+    color: #333;
+}
+@media screen and (max-width: 768px) {
+.ddmatch li p{font-size:12px;}
+.ddmatch .matchorigin li{font-size:12px;}
+.ddmatch td.control {
+    width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+}
+.ddmatch td.text {
+    width: 100%;
+    padding: 0;
+    display: block;
+}
+}
+.ddmatch .matchtarget {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.ddmatch ul.matchorigin {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }

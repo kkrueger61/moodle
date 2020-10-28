@@ -128,14 +128,14 @@ class block_forum_aggregator extends block_base {
                                 }
                                 
                                 $post->message = format_string($post->message, true, $COURSE->id);                        
-                                $post->message = shorten_text($post->message, 180, true, '');
+                                $post->message = shorten_text($post->message, 80, true, '');
 
                                 $user = $DB->get_record('user', array('id'=>$post->userid), '*', MUST_EXIST);
                                 
                                 $text .= html_writer::start_tag('li', $post_style).
                                          html_writer::start_tag('div', array('class' => 'head')).
                                          html_writer::tag('div', $post->subject, array('class' => 'subject')).
-                                         html_writer::tag('div', $OUTPUT->user_picture($user, array('size'=>21, 'class'=>'userpostpic')), array('class' => 'userpic')).
+                                         html_writer::tag('div', $OUTPUT->user_picture($user, array('size'=>31, 'class'=>'userpostpic')), array('class' => 'userpic')).
                                          html_writer::tag('div', fullname($post), array('class' => 'name')).
                                          html_writer::tag('div', get_string('posted', 'block_forum_aggregator').userdate($post->modified, $strftimerecent), array('class' => 'date')).
                                          html_writer::end_tag('div').
