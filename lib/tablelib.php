@@ -1244,7 +1244,7 @@ class flexible_table {
                             foreach ($requirednames as $name) {
                                 $sortname = $this->sort_link(get_string($name),
                                         $name, $primarysortcolumn === $name, $primarysortorder);
-                                $this->headers[$index] .= $sortname . ' / ';
+                                $this->headers[$index] .= $sortname . ' <br /> ';
                             }
                             $helpicon = '';
                             if (isset($this->helpforheaders[$index])) {
