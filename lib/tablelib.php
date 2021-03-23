@@ -1306,6 +1306,7 @@ class flexible_table {
                                 foreach ($requirednames as $name) {
                                     $sortname = $this->sort_link(get_string($name),
                                         $name, $primarysortcolumn === $name, $primarysortorder);
+                                    //KK no break in flexible table
                                     $this->headers[$index] .= $sortname . ' / ';
                                 }
                                 $helpicon = '';
