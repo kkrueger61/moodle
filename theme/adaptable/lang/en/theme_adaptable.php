@@ -788,9 +788,6 @@ $string['coursesectionborderradius'] = 'Course section border radius';
 $string['coursesectionborderradiusdesc'] = 'Set the radius of course section borders (rounded corners).';
 
 // Course section activity styling.
-$string['coursesectionactivityuseadaptableicons'] = 'Use Adaptable icon set';
-$string['coursesectionactivityuseadaptableiconsdesc'] = 'Turn this on to use the Adaptable icons.  If turned off, please also ensure you remove the directories adaptable/pix_plugins and adaptable/pix_core/f to use default Moodle icons.';
-
 $string['coursesectionactivityiconsize'] = 'Course section activity icon size';
 $string['coursesectionactivityiconsizedesc'] = 'Set the icon size for activities / resources (e.g. a value of 16px will set it at 16px by 16px).';
 

@@ -327,15 +327,6 @@ if ($ADMIN->fulltree) {
     $setting = new admin_setting_heading($name, $heading, '');
     $page->add($setting);
 
-    // Use Adaptable icons.
-    $name = 'theme_adaptable/coursesectionactivityuseadaptableicons';
-    $title = get_string('coursesectionactivityuseadaptableicons', 'theme_adaptable');
-    $description = get_string('coursesectionactivityuseadaptableiconsdesc', 'theme_adaptable');
-    $default = true;
-    $setting = new admin_setting_configcheckbox($name, $title, $description, $default, true, false);
-    $setting->set_updatedcallback('theme_reset_all_caches');
-    $page->add($setting);
-
     // Default icon size.
     $name = 'theme_adaptable/coursesectionactivityiconsize';
     $title = get_string('coursesectionactivityiconsize', 'theme_adaptable');

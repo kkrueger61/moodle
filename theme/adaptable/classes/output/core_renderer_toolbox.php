@@ -1907,11 +1907,11 @@ EOT;
                     $data = theme_adaptable_get_course_activities();
                     foreach ($data as $modname => $modfullname) {
                         if ($modname === 'resources') {
-                            $icon = $this->pix_icon('monologo', '', 'mod_page');
+                            $icon = $this->pix_icon('icon', '', 'mod_page');
                             $branch->add($icon.$modfullname, new moodle_url('/course/resources.php',
                                 array('id' => $this->page->course->id)), $modfullname);
                         } else {
-                            $icon = $this->pix_icon('monologo', '', $modname);
+                            $icon = $this->pix_icon('icon', '', $modname);
                             $branch->add($icon.$modfullname, new moodle_url('/mod/'.$modname.'/index.php',
                                     array('id' => $this->page->course->id)), $modfullname);
                         }
@@ -2372,7 +2372,7 @@ EOT;
                 // Full / Short Course Name.
                 case 'fullname':
                 case 'shortname':
-                    $retval .= '<div id="sitetitle" class="bd-highlight ' . $responsivecoursetitle . '">';
+                    $retval .= '<div id="sitetitle" class="bd-highlight pt-2 ' . $responsivecoursetitle . '">';
                     if (!empty($categoryheadercustomtitle)) {
                         $retval .= '<h1>'. format_string($categoryheadercustomtitle) . '</h1>';
                     }
@@ -2389,14 +2389,14 @@ EOT;
         // If the course id is one or 'enableheading' was 'off' above then we display the site title.
         if (($COURSE->id == 1) || ($usedefault)) {
             if (!empty($categoryheadercustomtitle)) {
-                $retval .= '<div id="sitetitle" class="bd-highlight ' . $responsivecoursetitle . '">';
+                $retval .= '<div id="sitetitle" class="bd-highlight pt-2 ' . $responsivecoursetitle . '">';
                 $retval .= '<h1>'. format_string($categoryheadercustomtitle) . '</h1>';
                 $retval .= '</div>';
             } else {
                 switch ($this->page->theme->settings->sitetitle) {
                     case 'default':
                         $sitetitle = $SITE->fullname;
-                        $retval .= '<div id="sitetitle" class="bd-highlight ' . $responsivecoursetitle . '"><h1>'
+                        $retval .= '<div id="sitetitle" class="bd-highlight pt-2 ' . $responsivecoursetitle . '"><h1>'
                             . format_string($sitetitle) . '</h1></div>';
                         break;
 
@@ -2408,7 +2408,7 @@ EOT;
                             $header = format_string($header);
                             $this->page->set_heading($header);
 
-                            $retval .= '<div id="sitetitle" class="bd-highlight ' . $responsivecoursetitle . '">'
+                            $retval .= '<div id="sitetitle" class="bd-highlight pt-2 ' . $responsivecoursetitle . '">'
                                 . format_text($sitetitlehtml, FORMAT_HTML) . '</div>';
                         }
                 }
@@ -3030,6 +3030,39 @@ EOT;
         return $content;
     }
 
+    /**
+     * Renders the login form.
+     *
+     * @param \core_auth\output\login $form The renderable.
+     * @return string
+     */
+    public function render_login(\core_auth\output\login $form) {
+        global $SITE;
+
+        $context = $form->export_for_template($this);
+
+        $context->errorformatted = $this->error_text($context->error);
+        $url = $this->get_logo_url();
+        if ($url) {
+            $url = $url->out(false);
+        }
+        $context->logourl = $url;
+        $context->sitename = format_string($SITE->fullname, true,
+            ['context' => context_course::instance(SITEID), "escape" => false]);
+
+        if ($context->hasidentityproviders) {
+            $authsequence = get_enabled_auth_plugins(); // Get all auths.
+            if (in_array('oidc', $authsequence)) {
+                $authplugin = get_auth_plugin('oidc');
+                $oidc = $authplugin->loginpage_idp_list($this->page->url->out(false));
+                if (!empty($oidc)) {
+                    $context->hasoidc = true;
+                }
+            }
+        }
+
+        return $this->render_from_template('theme_adaptable/core/loginform', $context);
+    }
 
     /**
      * Renders tabtree

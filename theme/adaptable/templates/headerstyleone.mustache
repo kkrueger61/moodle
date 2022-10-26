@@ -51,7 +51,7 @@
 
                 <div class="collapse navbar-collapse">
                 {{^menuslinkright}}
-                <div class="my-auto m-1">{{{output.get_top_menus}}}</div>
+                <div class="my-auto m-1">{{{topmenus}}}</div>
                 {{/menuslinkright}}
                     <ul class="navbar-nav ml-auto my-auto">
                         {{#menuslinkright}}
@@ -86,7 +86,7 @@
         <div class="row d-flex justify-content-start align-items-center h-100 ">
             {{#pageheaderoriginal}}
             <div class="col-lg-8 p-0">
-                <div class="bd-highlight">
+                <div class="bd-highlight d-flex">
                     {{#sitelogo}}{{{sitelogo}}}{{/sitelogo}}
                     {{#sitetitle}}{{{sitetitle}}}{{/sitetitle}}
                 </div>

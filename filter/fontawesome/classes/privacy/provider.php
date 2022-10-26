@@ -23,7 +23,6 @@
  */
 
 namespace filter_fontawesome\privacy;
-defined('MOODLE_INTERNAL') || die();
 
 /**
  * Privacy Subsystem for tool_courseimport implementing null_provider.

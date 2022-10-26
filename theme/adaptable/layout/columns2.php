@@ -47,31 +47,33 @@ $regions = theme_adaptable_grid($left, $hassidepost);
         echo $OUTPUT->page_navbar();
     ?>
     <div id="page-content" class="row<?php echo $regions['direction'];?>">
-        <section id="region-main" class="<?php echo $regions['content'];?>">
-            <?php
-            echo $OUTPUT->get_course_alerts();
-            echo $OUTPUT->course_content_header();
-            echo $OUTPUT->main_content();
+        <div id="region-main-box" class="<?php echo $regions['content'];?>">
+            <section id="region-main">
+                <?php
+                echo $OUTPUT->get_course_alerts();
+                echo $OUTPUT->course_content_header();
+                echo $OUTPUT->main_content();
 
-            if ($PAGE->has_set_url()) {
-                $currenturl = $PAGE->url;
-            } else {
-                $currenturl = $_SERVER["REQUEST_URI"];
-            }
-
-            // Display course page block activity bottom region if this is a mod page of type where you're viewing
-            // a section, page or book (chapter).
-            if (!empty($PAGE->theme->settings->coursepageblockactivitybottomenabled)) {
-                if ( stristr ($currenturl, "mod/page/view") ||
-                     stristr ($currenturl, "mod/book/view") ) {
-                    echo $OUTPUT->get_block_regions('customrowsetting', 'course-section-', '12-0-0-0');
+                if ($PAGE->has_set_url()) {
+                    $currenturl = $PAGE->url;
+                } else {
+                    $currenturl = $_SERVER["REQUEST_URI"];
                 }
-            }
 
-            echo $OUTPUT->activity_navigation();
-            echo $OUTPUT->course_content_footer();
-            ?>
-        </section>
+                // Display course page block activity bottom region if this is a mod page of type where you're viewing
+                // a section, page or book (chapter).
+                if (!empty($PAGE->theme->settings->coursepageblockactivitybottomenabled)) {
+                    if ( stristr ($currenturl, "mod/page/view") ||
+                        stristr ($currenturl, "mod/book/view") ) {
+                        echo $OUTPUT->get_block_regions('customrowsetting', 'course-section-', '12-0-0-0');
+                    }
+                }
+
+                echo $OUTPUT->activity_navigation();
+                echo $OUTPUT->course_content_footer();
+                ?>
+            </section>
+        </div>
 
         <?php
         if ($hassidepost) {

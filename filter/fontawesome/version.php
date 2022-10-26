@@ -20,13 +20,14 @@
  * @package    filter_fontawesome
  * @copyright  2013-2016 Julian Ridden <julian@moodleman.net>
  * @author     2019 Adrian Perez, Fernfachhochschule Schweiz (FFHS) <adrian.perez@ffhs.ch>
+ * @author     2022 Sascha Vogel, Fernfachhochschule Schweiz (FFHS) <sascha.vogel@ffhs.ch>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version = 2021052600;
+$plugin->version = 2022101200;
 $plugin->requires = 2021051700;
 $plugin->component = 'filter_fontawesome';
-$plugin->release = 'v3.11-r1';
+$plugin->release = 'v3.11-r2';
 $plugin->maturity = MATURITY_STABLE;

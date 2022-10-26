@@ -93,13 +93,15 @@ if (!empty($PAGE->theme->settings->infobox2)) {
             <nav class="breadcrumb-button"><?php echo $OUTPUT->page_heading_button(); ?></nav>
         </div>
 
-        <section id="region-main" class="<?php echo $regions['content'];?>">
+        <div id="region-main-box" class="<?php echo $regions['content'];?>">
+            <section id="region-main">
             <?php
             echo $OUTPUT->course_content_header();
             echo $OUTPUT->main_content();
             echo $OUTPUT->course_content_footer();
             ?>
-        </section>
+            </section>
+        </div>
         <?php
         if ($hassidepost) {
             echo $OUTPUT->blocks('side-post', $regions['blocks'].' d-print-none ');

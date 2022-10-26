@@ -40,7 +40,8 @@ $regions = theme_adaptable_grid($left, $hassidepost);
         echo $OUTPUT->page_navbar();
     ?>
     <div id="page-content" class="row<?php echo $regions['direction'];?>">
-        <section id="region-main" class="<?php echo $regions['content']; ?>">
+        <div id="region-main-box" class="<?php echo $regions['content']; ?>">
+            <section id="region-main">
             <?php
             echo $OUTPUT->get_course_alerts();
             echo $OUTPUT->course_content_header();
@@ -50,7 +51,8 @@ $regions = theme_adaptable_grid($left, $hassidepost);
             } else {
                 $currenturl = $_SERVER["REQUEST_URI"];
             } ?>
-        </section>
+            </section>
+        </div>
         <?php
         if ($hassidepost) {
             echo $OUTPUT->blocks('side-post', $regions['blocks'].' d-print-none ');
