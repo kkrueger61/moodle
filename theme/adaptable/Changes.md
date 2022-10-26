@@ -1,3 +1,15 @@
+Change Log in version 311.1.3 (2021081008)
+===========================================
+1. Fix 'Missing Activity Icons under 'This course' menu' - #286.
+2. Fix 'OAuth 2 in wrong place on login form' - ref: https://moodle.org/mod/forum/discuss.php?d=436838.
+3. Fix 'No "region-main-box" identifier causing LTI module submission failure' - thanks to Sergey Kovzik for the report.
+4. Fix header search icon colour.
+5. Fix 'Zoomin not operating on main region' - ref: https://moodle.org/mod/forum/discuss.php?d=437305#p1760772.
+6. Fix 'Search input navbar styling'.
+7. Fix 'Header one long title underneath logo'.
+8. Fixed semantic versioning 2.0.0 (https://semver.org/) for the release value, whereby the 'major' number is the Moodle core branch
+   number.  The 'version' property still needs to follow the Moodle way in order for the plugin to operate within the core API.
+
 Change Log in version 3.11.1.2 (2021081007)
 ===========================================
 1. Fix 'Adaptable, sticky navbar and usertours' - https://moodle.org/mod/forum/discuss.php?d=434259.

@@ -20,8 +20,13 @@
  * @package    filter_fontawesome
  * @copyright  2014 Damyon Wiese
  * @author     2019 Adrian Perez, Fernfachhochschule Schweiz (FFHS) <adrian.perez@ffhs.ch>
+ * @author     2022 Sascha Vogel, Fernfachhochschule Schweiz (FFHS) <sascha.vogel@ffhs.ch>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+
+namespace filter_fontawesome;
+
+use filter_fontawesome;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -37,7 +42,7 @@ require_once($CFG->dirroot . '/filter/fontawesome/filter.php');
  * @author     2019 Adrian Perez, Fernfachhochschule Schweiz (FFHS) <adrian.perez@ffhs.ch>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class filter_fontawesome_testcase extends advanced_testcase {
+class filter_test extends \advanced_testcase {
 
     /** @var object $filter contains the instance */
     protected $filter;
@@ -45,7 +50,7 @@ class filter_fontawesome_testcase extends advanced_testcase {
     protected function setUp(): void {
         parent::setUp();
         $this->resetAfterTest(true);
-        $this->filter = new filter_fontawesome(context_system::instance(), array());
+        $this->filter = new filter_fontawesome(\context_system::instance(), array());
     }
 
     /**
@@ -54,7 +59,7 @@ class filter_fontawesome_testcase extends advanced_testcase {
      * @param string $content contains the fontawesome icon class
      * @param bool $filtershouldrun does this run must success or not
      */
-    public function run_with_content($content, $filtershouldrun) {
+    public function run_with_content(string $content, bool $filtershouldrun) {
         $pre = 'Some pre text';
         $post = 'Some post text';
 
@@ -94,5 +99,58 @@ class filter_fontawesome_testcase extends advanced_testcase {
         $this->run_with_content('fa-check onmouseover="alert(1)"', false);
         $this->run_with_content('fa-check" onmouseover="alert(1)""', false);
         $this->run_with_content('fad-angel', false);
+    }
+
+    /**
+     * Data provider for fontawesome filtering tests.
+     */
+    public function fontawesome_testcases() {
+        return [
+                'Filter an icon in a text' => [
+                        'Hello [fa-world] world',
+                        'Hello <i class="fa fa-world" aria-hidden="true"></i> world'
+                ],
+                'No filter in <nolink> tag' => [
+                        'Hello <nolink>[fa-world]</nolink> world, hello <nolink>[fa-star] stars</nolink>',
+                        'Hello <nolink>[fa-world]</nolink> world, hello <nolink>[fa-star] stars</nolink>'
+                ],
+                'No filter in nolink span tag' => [
+                        'Hello <span class="nolink">[fa-world]</span> world',
+                        'Hello <span class="nolink">[fa-world]</span> world'
+                ],
+                'No filter in extended nolink span tag' => [
+                        'Hello <span id="test" class="anotherclass1 nolink anotherclass2">[fa-world]</span> world',
+                        'Hello <span id="test" class="anotherclass1 nolink anotherclass2">[fa-world]</span> world'
+                ],
+                'No filter in whole text' => [
+                        '<nolink>Hello [fa-world] world</nolink>',
+                        '<nolink>Hello [fa-world] world</nolink>'
+                ],
+                'Mix filter and no filter' => [
+                        'Hello [fa-world],
+                        hello <span class="nolink">[fa-sun]</span>, hello <nolink>[fa-star]</nolink> stars',
+                        'Hello <i class="fa fa-world" aria-hidden="true"></i>,
+                        hello <span class="nolink">[fa-sun]</span>, hello <nolink>[fa-star]</nolink> stars'
+                ],
+                'Nest nolink tags and span tags' => [
+                        'Hello [fa-world],
+                        hello <span class="nolink">[fa-sun], hello <nolink>[fa-star]</nolink> stars</span>',
+                        'Hello <i class="fa fa-world" aria-hidden="true"></i>,
+                        hello <span class="nolink">[fa-sun], hello <nolink>[fa-star]</nolink> stars</span>'
+                ]
+        ];
+    }
+
+    /**
+     * Check that all texts are filtered correctly.
+     *
+     * @dataProvider fontawesome_testcases
+     * @param string $text
+     * @param string $expected
+     * @return void
+     */
+    public function test_filter_fontawesome(string $text, string $expected) {
+        $result = $this->filter->filter($text);
+        $this->assertEquals($result, $expected);
     }
 }

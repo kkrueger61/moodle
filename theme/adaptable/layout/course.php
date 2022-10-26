@@ -75,7 +75,8 @@ if ($movesidebartofooter) {
         }
         ?>
 
-        <section id="region-main" class="<?php echo $regions['content'];?>">
+        <div id="region-main-box" class="<?php echo $regions['content'];?>">
+            <section id="region-main">
             <?php
             $courseinfo = new \theme_adaptable\output\courseinfo();
             echo $OUTPUT->render($courseinfo);
@@ -169,7 +170,8 @@ if ($movesidebartofooter) {
    the sidebar information in the main content. */
 
 if ($movesidebartofooter == false) { ?>
-    </section>
+        </section>
+    </div>
 <?php }
 
 /* Check if the block regions are disabled in settings.  If it is and there were any blocks
@@ -212,7 +214,8 @@ if ($movesidebartofooter) {
 }
 
 if ($movesidebartofooter) { ?>
-    </section>
+        </section>
+    </div>
 <?php } ?>
     </div>
 </div>

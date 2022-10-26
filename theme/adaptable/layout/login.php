@@ -40,7 +40,8 @@ echo '<div class="container outercont">';
     echo $OUTPUT->page_navbar();
     ?>
     <div id="page-content" class="row">
-        <section id="region-main" class="col-12">
+        <div id="region-main-box" class="col-12">
+            <section id="region-main">
             <?php
 
             $logintextboxtop = $OUTPUT->get_setting('logintextboxtop', 'format_html');
@@ -69,7 +70,8 @@ echo '<div class="container outercont">';
             }
 
             ?>
-        </section>
+            </section>
+        </div>
     </div>
 </div>
 

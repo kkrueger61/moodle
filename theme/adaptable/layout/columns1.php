@@ -36,14 +36,16 @@ require_once(dirname(__FILE__) . '/includes/header.php');
         echo $OUTPUT->page_navbar();
     ?>
     <div id="page-content" class="row">
-        <section id="region-main" class="col-12">
+        <div id="region-main-box" class="col-12">
+            <section id="region-main">
             <?php
             echo $OUTPUT->course_content_header();
             echo $OUTPUT->main_content();
             echo $OUTPUT->activity_navigation();
             echo $OUTPUT->course_content_footer();
             ?>
-        </section>
+            </section>
+        </div>
     </div>
 </div>
 

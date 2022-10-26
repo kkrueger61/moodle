@@ -92,7 +92,8 @@ if (!empty($PAGE->theme->settings->dashblocksenabled)) {
 
             $taborder = explode ('-', $PAGE->theme->settings->tabbedlayoutdashboard);
             $count = 0;
-            echo '<section id="region-main" class="' . $regions['content'] . '">';
+            echo '<div id="region-main-box" class="' . $regions['content'] . '">';
+            echo '<section id="region-main">';
 
             echo '<main id="dashboardtabcontainer" class="tabcontentcontainer">';
 
@@ -144,17 +145,20 @@ if (!empty($PAGE->theme->settings->dashblocksenabled)) {
 
             echo '</main>';
             echo '</section>';
+            echo '</div>';
             if ($hassidepost) {
                 echo $OUTPUT->blocks('side-post', $regions['blocks'].' d-print-none ');
             }
         } else { ?>
-        <section id="region-main" class="<?php echo $regions['content'];?>">
+        <div id="region-main-box" class="<?php echo $regions['content'];?>">
+            <section id="region-main">
             <?php
                 echo $OUTPUT->course_content_header();
                 echo $OUTPUT->main_content();
                 echo $OUTPUT->course_content_footer();
             ?>
-        </section>
+            </section>
+        </div>
 
             <?php
             if ($hassidepost) {

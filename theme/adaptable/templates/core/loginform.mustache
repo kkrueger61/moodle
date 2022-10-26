@@ -115,6 +115,7 @@
             {{/error}}
 
             <div class="row justify-content-md-center">
+                {{#hasoidc}}
                 {{#hasidentityproviders}}
                 <div class="col-md-8">
                     <h2 class="h6 mt-2">{{#str}} potentialidps, auth {{/str}}</h2>
@@ -138,12 +139,13 @@
                     </div>
                     {{/canloginasguest}}
                 {{/hasidentityproviders}}
-                {{^hasidentityproviders}}
+                {{/hasoidc}}
+                {{^hasoidc}}
                 <div class="col-md-5">
-                        {{> theme_adaptable/corepartials/loginup }}
+                    {{> theme_adaptable/corepartials/loginup }}
                 </div>
                 <div class="col-md-5">
-                {{/hasidentityproviders}}
+                {{/hasoidc}}
                     <div class="forgetpass mt-3">
                         <p><a href="{{forgotpasswordurl}}">{{#str}}forgotten{{/str}}</a></p>
                     </div>
@@ -159,7 +161,7 @@
                     </div>
                     {{/canloginasguest}}
                     {{/hasidentityproviders}}
-                    {{#hasidentityproviders}}
+                    {{#hasoidc}}
                     <button class="loginbtn btn btn-secondary btn-block mt-2" type="button" data-toggle="collapse" data-target="#loginmanual"
                         aria-expanded="false" aria-controls="loginmanual">
                         {{#str}} logintextmanualbutton, theme_adaptable {{/str}}
@@ -167,8 +169,33 @@
                     <div class="collapse" id="loginmanual">
                         {{> theme_adaptable/corepartials/loginup }}
                     </div>
-                    {{/hasidentityproviders}}
+                    {{/hasoidc}}
                 </div>
+                {{^hasoidc}}
+                {{#hasidentityproviders}}
+                    <div class="col-md-8">
+                    <h2 class="h6 mt-2">{{#str}} potentialidps, auth {{/str}}</h2>
+                    <div class="potentialidplist mt-3">
+                        {{#identityproviders}}
+                            <div class="potentialidp">
+                                <a href="{{url}}" title="{{name}}">
+                                    <button class="loginbtn btn btn-secondary btn-block">
+                                    {{#iconurl}}
+                                        <img src="{{iconurl}}" alt="{{name}}" width="24" height="24"/>
+                                    {{/iconurl}}
+                                    {{name}}
+                                    </button>
+                                </a>
+                            </div>
+                        {{/identityproviders}}
+                    </div>
+                    {{#canloginasguest}}
+                    <div class="mt-2">
+                        {{> theme_adaptable/corepartials/loginguest }}
+                    </div>
+                    {{/canloginasguest}}
+                {{/hasidentityproviders}}
+                {{/hasoidc}}
             </div>
         </div>
     </div>
