@@ -51,12 +51,16 @@ function theme_adaptable_get_main_scss_content($theme) {
     if (empty($boosttheme)) {
         $boosttheme = theme_config::load('boost'); // Needs to be the Boost theme so that we get its settings.
     }
-    $scss = theme_boost_get_main_scss_content($boosttheme);
+
+    $scss = '$enable-rounded: false !default;'; // TODO: A setting?
+
+    $scss .= theme_boost_get_main_scss_content($boosttheme);
 
     $scss .= file_get_contents($CFG->dirroot.'/theme/adaptable/scss/main.scss');
 
     $settingssheets = array(
         'adaptable',
+        'admin',
         'blocks',
         'button',
         'course',
@@ -623,8 +627,6 @@ function theme_adaptable_pluginfile($course, $cm, $context, $filearea, $args, $f
         }
         if ($filearea === 'logo') {
             return $theme->setting_file_serve('logo', $args, $forcedownload, $options);
-        } else if ($filearea === 'favicon') {
-            return $theme->setting_file_serve('favicon', $args, $forcedownload, $options);
         } else if ($filearea === 'homebk') {
             return $theme->setting_file_serve('homebk', $args, $forcedownload, $options);
         } else if ($filearea === 'pagebackground') {

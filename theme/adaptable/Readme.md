@@ -48,16 +48,17 @@ This theme has been developed by the following:
 - Manoj Solanki (Coventry University)
 - G J Barnard MSc. BSc(Hons)(Sndw). MBCS. CEng. CITP. PGCE.
 
-Required version of Moodle
+Required release of Moodle
 ==========================
-This version works with Moodle 3.11 version 2021051700.00 (Build: 20210517) and above within the 3.11 branch until the next release.
+This release works with Moodle 4.1 version 2022112800.00 (Build: 20221128) and above within the MOODLE_401_STABLE branch until the
+next release.
 
 Please ensure that your hardware and software complies with 'Requirements' in 'Installing Moodle' on
-'https://docs.moodle.org/311/en/Installing_Moodle'.
+'https://docs.moodle.org/401/en/Installing_Moodle'.
 
 Installation
 ============
- 1. Ensure you have the version of Moodle as stated above in 'Required version of Moodle'.  This is essential as the
+ 1. Ensure you have the release of Moodle as stated above in 'Required release of Moodle'.  This is essential as the
     theme relies on underlying core code that is out of my control.
  2. Login as an administrator and put Moodle in 'Maintenance Mode' so that there are no users using it bar you as the administrator.
  3. Copy the extracted 'adaptable' folder to the '/theme/' folder.
@@ -67,7 +68,7 @@ Installation
 
 Upgrading
 =========
- 1. Ensure you have the version of Moodle as stated above in 'Required version of Moodle'.  This is essential as the
+ 1. Ensure you have the release of Moodle as stated above in 'Required release of Moodle'.  This is essential as the
     theme relies on underlying core code that is out of my control.
  2. Login as an administrator and put Moodle in 'Maintenance Mode' so that there are no users using it bar you as the administrator.
  3. Make a backup of your old 'adaptable' folder in '/theme/' and then delete the folder.
@@ -87,10 +88,10 @@ Uninstallation
 
 Versioning
 ==========
-Adaptable is maintained under the Semantic Versioning guidelines as much as possible. Releases will be numbered with the
+Adaptable is maintained under the Semantic Versioning 2.0.0 guidelines as much as possible. Releases will be numbered with the
 following format:
 
-moodleversion.major.minor.(patch)
+major.minor.patch
 
 and following these guidelines:
 

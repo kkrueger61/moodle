@@ -52,6 +52,7 @@ $regions = theme_adaptable_grid($left, $hassidepost);
                 <?php
                 echo $OUTPUT->get_course_alerts();
                 echo $OUTPUT->course_content_header();
+                echo $OUTPUT->activity_header();
                 echo $OUTPUT->main_content();
 
                 if ($PAGE->has_set_url()) {

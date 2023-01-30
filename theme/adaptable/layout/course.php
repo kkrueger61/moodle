@@ -78,9 +78,6 @@ if ($movesidebartofooter) {
         <div id="region-main-box" class="<?php echo $regions['content'];?>">
             <section id="region-main">
             <?php
-            $courseinfo = new \theme_adaptable\output\courseinfo();
-            echo $OUTPUT->render($courseinfo);
-
             if (!empty($PAGE->theme->settings->tabbedlayoutcoursepage)) {
                 // Use Adaptable tabbed layout.
                 $currentpage = theme_adaptable_get_current_page();

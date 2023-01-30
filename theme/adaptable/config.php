@@ -101,6 +101,9 @@ if ( (is_object($PAGE)) && ($PAGE->pagelayout) ) {
         case "frontpage":
             $regions = $frontlayoutregions;
             break;
+        case "mycourses":
+            $regions = $courselayoutregions;
+            break;
         case "mydashboard":
             $regions = $frontlayoutregions;
             break;
@@ -180,6 +183,13 @@ $THEME->layouts = array(
         'regions' => array('side-post'),
         'defaultregion' => 'side-post'
 
+    ),
+    // My courses page.
+    'mycourses' => array(
+        'file' => 'dashboard.php',
+        'regions' => $regions,
+        'defaultregion' => 'side-post',
+        'options' => array('langmenu' => true),
     ),
     // My dashboard page.
     'mydashboard' => array(
@@ -262,3 +272,5 @@ $THEME->scss = function(theme_config $theme) {
 };
 
 $THEME->csspostprocess = 'theme_adaptable_process_customcss';
+$THEME->haseditswitch = false;
+$THEME->usescourseindex = false;

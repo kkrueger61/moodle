@@ -142,7 +142,7 @@ $string['frontpagecoursesettings'] = 'Frontpage courses list';
 $string['frontpagesettingsheading'] = 'Frontpage rendering';
 $string['frontpagedesc'] = 'Configure the way that the course boxes are rendered on the frontpage.';
 $string['frontpagerenderer'] = 'Frontpage course boxes';
-$string['frontpagerendererdesc'] = 'Control the way that the coure boxes on the front page are rendered.';
+$string['frontpagerendererdesc'] = 'Control the way that the course boxes on the front page are rendered.';
 $string['frontpagerendereroption1'] = 'Tiles';
 $string['frontpagerendereroption2'] = 'Tiles w/ overlay';
 $string['frontpagerendereroption3'] = 'Moodle default';
@@ -787,7 +787,6 @@ $string['coursesectionbordercolordesc'] = 'Set the border colour of course secti
 $string['coursesectionborderradius'] = 'Course section border radius';
 $string['coursesectionborderradiusdesc'] = 'Set the radius of course section borders (rounded corners).';
 
-// Course section activity styling.
 $string['coursesectionactivityiconsize'] = 'Course section activity icon size';
 $string['coursesectionactivityiconsizedesc'] = 'Set the icon size for activities / resources (e.g. a value of 16px will set it at 16px by 16px).';
 
@@ -1007,7 +1006,7 @@ $string['passwordplaceholder'] = 'Password';
 // Header.
 $string['headersettings'] = 'Header';
 $string['headersettingsheading'] = 'Customize the header of this theme.  See the layout \'<a href="./../theme/adaptable/pix/layout.png" target="_blank">here</a>\'.';
-$string['headerdesc'] = 'Upload your favicon, logo, set login form in header, adjust titles in header.<br />You can set font size and styles for titles in the \'<a href="./../admin/settings.php?section=theme_adaptable_font">fonts</a>\' settings page.';
+$string['headerdesc'] = 'Upload your logo, set login form in header, adjust titles in header.<br />You can set font size and styles for titles in the \'<a href="./../admin/settings.php?section=theme_adaptable_font">fonts</a>\' settings page.';
 
 $string['headerbgimage'] = 'Background image';
 $string['headerbgimagedesc'] = 'Set a background image in the header. Minimum size is 1600x180px (1900x180px recommended). The image cover the full header. You can add a colour in \'Top header background colour\' or use <i>transparent</i> to show the background image. In that case, modify the text colour to get displayed correctly over the image.';
@@ -1080,7 +1079,7 @@ $string['logo'] = 'Logo';
 $string['logodesc'] = 'Upload a logo for use on your site.  Recommended size is 200px by 80px.';
 
 $string['favicon'] = 'Favicon';
-$string['favicondesc'] = 'Upload a favicon for use on your site,';
+$string['favicondesc'] = 'Upload a favicon for use on your site using the core setting \'core_admin | favicon\' under \'Site Administration\' -> \'Appearance\' -> \'Logos\'.';
 
 $string['enableavailablecourses'] = 'Display "Available Courses"';
 $string['enableavailablecoursesdesc'] = 'Display "Available Courses" text in the frontpage.';
@@ -1654,7 +1653,7 @@ $string['versioninfo'] = 'Release {$a->release}, version {$a->version} on Moodle
 $string['versionalpha'] = 'Alpha version - Almost certainly contains bugs.  This is a development version for developers \'only\'!  Don\'t even think of installing on a production server!';
 $string['versionbeta'] = 'Beta version - Likely to contain bugs.  Ready for testing by administrators on a test server only.';
 $string['versionrc'] = 'Release candidate version - May contain bugs.  Check completely on a test server before considering on a production server.';
-$string['versionstable'] = 'Stable version - Could contain bugs.  Check on a test server before installing on your production server.';
+$string['versionstable'] = 'Stable version - Could contain bugs as there is not enough time left in the universe to find them all.  Check on a test server before installing on your production server, seriously do!  You won\'t regret it and you\'ll be able to customise until you\'re happy, then use the \'Import / export settings\' functionality to transfer the setting values, bar the files.';
 
 // Grade editing.
 $string['turngradereditingoff'] = 'Turn grader editing off';
@@ -1681,51 +1680,6 @@ $string['forumheaderbackgroundcolor'] = 'Forum post header background';
 $string['forumheaderbackgroundcolordesc'] = 'Background colour for a forum post.';
 $string['forumbodybackgroundcolor'] = 'Forum post body background';
 $string['forumbodybackgroundcolordesc'] = 'Background colour for a forum post.';
-
-/* Course page further information.
-   Activity display. */
-$string['feedbackavailable'] = 'Feedback available';
-
-$string['xanswered'] = '{$a->completed} answered';
-$string['xattempted'] = '{$a->completed} attempted';
-$string['xcontributed'] = '{$a->completed} contributed';
-$string['xsubmitted'] = '{$a->completed} submitted';
-$string['xofyanswered'] = '{$a->completed} of {$a->participants} answered';
-$string['xofyattempted'] = '{$a->completed} of {$a->participants} attempted';
-$string['xofycontributed'] = '{$a->completed} of {$a->participants} contributed';
-$string['xofysubmitted'] = '{$a->completed} of {$a->participants} submitted';
-$string['xungraded'] = '{$a} ungraded';
-
-// Coursesetting - Show addtional data for modules.
-$string['enableadditionalmoddata'] = 'Enable additional information';
-$string['enableadditionalmoddatadesc'] = 'This is a \'Site level\' switch to turn the activity information on or off.  It needs to be \'on\' for the related settings that operate at a course level to take effect.  As this functionality can be computationally expensive, then it is strongly suggested that you undertake full testing before using on a production system.  Note: Purges the cache caches when changed.';
-
-$string['courseadditionalmoddatamaxstudents'] = 'Set the maximum number of students on a course that \'Show additional information\' will apply to';
-$string['courseadditionalmoddatamaxstudentsdesc'] = 'Additional information can take time to calculate, especially on large courses, so here you can set the maximum number of students that a couse can have for the functionality to show on that course.  Above that value, the \'Additional information\' will NOT be calculated or show regardless of the course settings!  A value of \'0\' means \'unlimited\'.  Note: Purges the cache caches when changed.';
-
-$string['courseadditionalmoddatastudentsinfounlimited'] = 'Additional information will show for the enabled activities for {$a} students.';
-$string['courseadditionalmoddatastudentsinfolimitedshow'] = 'Additional information will show for the enabled activities for {$a->students} students as the number does not exceed the maximum \'{$a->maxstudents}\' set by the administrator on the Adaptable theme setting \'courseadditionalmoddatamaxstudents\'.';
-$string['courseadditionalmoddatastudentsinfolimitednoshow'] = 'Additional information will NOT show for the enabled activities for {$a->students} students as the number exceededs the maximum \'{$a->maxstudents}\' set by the administrator on the Adaptable theme setting \'courseadditionalmoddatamaxstudents\'.';
-
-$string['coursesectionactivityfurtherinformation'] = 'Course page further information';
-$string['coursesectionactivityfurtherinformationassign'] = 'Show assignment information';
-$string['coursesectionactivityfurtherinformationassigndesc'] = 'Show assignment information.  For teachers / admins, show number of submissions.';
-$string['coursesectionactivityfurtherinformationquiz'] = 'Show quiz information';
-$string['coursesectionactivityfurtherinformationquizdesc'] = 'Show quiz information.  For teachers / admins, show number of submissions.';
-$string['coursesectionactivityfurtherinformationchoice'] = 'Show choice information';
-$string['coursesectionactivityfurtherinformationchoicedesc'] = 'Show choice information.  For teachers / admins, show number of submissions.';
-$string['coursesectionactivityfurtherinformationfeedback'] = 'Show feedback information';
-$string['coursesectionactivityfurtherinformationfeedbackdesc'] = 'Show feedback information.  For teachers / admins, show number of submissions.';
-$string['coursesectionactivityfurtherinformationlesson'] = 'Show lesson information';
-$string['coursesectionactivityfurtherinformationlessondesc'] = 'Show lesson information.  For teachers / admins, show number of submissions.';
-$string['coursesectionactivityfurtherinformationdata'] = 'Show database information';
-$string['coursesectionactivityfurtherinformationdatadesc'] = 'Show data information.  For teachers / admins, show number of submissions.';
-
-$string['cachedef_activitystudentrolescache'] = 'Caches the student roles.';
-$string['cachedef_activitymodulecountcache'] = 'Caches the number of students who can access a given module on a given course.';
-$string['cachedef_activitystudentscache'] = 'Caches the ids of the students on a given course.';
-$string['cachedef_activityusercreatedcache'] = 'Caches the ids of the new users on a given course.';
-$string['cannotgetactivitycacheslock'] = 'Cannot get activity caches lock for course id {$a}.';
 
 // Activity display margins.
 $string['coursesectionactivitymargintop'] = 'Top margin activity spacing';

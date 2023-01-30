@@ -271,18 +271,16 @@ div.signuppanel h2 {
 .socialicons {
     padding-top: [[setting:socialpaddingtop]];
     a {
+        // Make at least 29px, values look odd but on inspection they are needed to be so for FontAwesome.
+        font-size: [[setting:socialsize]];
+        line-height: [[setting:socialsize]];
         padding-left: [[setting:socialpaddingsidehalf]]px;
         padding-right: [[setting:socialpaddingsidehalf]]px;
         &:first-of-type {
-            padding-left: [[setting:socialpaddingside]]px;
+            margin-left: [[setting:socialpaddingsidehalf]]px;
         }
         &:last-of-type {
-            padding-right: [[setting:socialpaddingside]]px;
-        }
-        i {
-            // Make at least 29px, values look odd but on inspection they are needed to be so for FontAwesome.
-            font-size: [[setting:socialsize]];
-            line-height: [[setting:socialsize]];
+            margin-right: [[setting:socialpaddingsidehalf]]px;
         }
     }
 }
@@ -350,8 +348,7 @@ a.component-expand .badge {
     margin: 0.8em 0.8em 0.4em 0.8em;
 }
 
-.badge,
-.count-container {
+.navbar .count-container {
     background-color: [[setting:msgbadgecolor]];
 }
 
@@ -907,19 +904,6 @@ input[type="radio"], input[type="checkbox"] {
     margin-right: 1px;
 }
 
-#adminsettings h3 {
-    color: [[setting:fontheadercolor]];
-    display: block;
-    font-family: [[setting:fontheadername]], sans-serif !important;
-    font-size: 24px;
-    font-weight: [[setting:fontheaderweight]] !important;
-    line-height: 40px;
-    margin-bottom: 20px;
-    margin-top: 40px;
-    padding: 0;
-    width: 100%;
-}
-
 #region-main {
     background-color: [[setting:regionmaincolor]];
     border: none;
@@ -1243,7 +1227,8 @@ input[type="radio"], input[type="checkbox"] {
 }
 
 #page-navbar .breadcrumb-button {
-    display: inline;
+    display: block;
+    text-align: right;
 }
 
 .user-enroller-panel {
@@ -1980,33 +1965,6 @@ img.smallicon {
 // Adaptable 2.0.
 .p-0 {
     background-color: transparent !important;
-}
-
-.row-fluid .col-9 {
-    flex: none;
-    max-width: none;
-    min-height: inherit;
-    width: 74.46808511%;
-    *width: 74.41489362%;
-}
-
-.row-fluid .col-3 {
-    width: 24.40425532%;
-    *width: 24.35106383%;
-}
-
-@media (max-width: 767px) {
-    .row-fluid .col-3 {
-        flex: none;
-        max-width: 100%;
-        width: 100%;
-    }
-
-    .row-fluid .col-9 {
-        flex: none;
-        max-width: none;
-        width: 100%;
-    }
 }
 
 .form-inline input.form-control[type=text] {

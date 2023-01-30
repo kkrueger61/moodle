@@ -49,6 +49,14 @@ if ($ADMIN->fulltree) {
     $setting = new admin_setting_configcheckbox($name, $title, $description, $default, true, false);
     $page->add($setting);
 
+    // Unaddable blocks.
+    $name = 'theme_adaptable/unaddableblocks';
+    $title = get_string('unaddableblocks', 'theme_boost');
+    $description = get_string('unaddableblocks_desc', 'theme_boost');
+    $default = '';
+    $setting = new admin_setting_configtext($name, $title, $description, $default, PARAM_TEXT);
+    $page->add($setting);
+
     // Colours.
     $name = 'theme_adaptable/settingscolors';
     $heading = get_string('settingscolors', 'theme_adaptable');

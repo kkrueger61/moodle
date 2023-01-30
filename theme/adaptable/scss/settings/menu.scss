@@ -469,9 +469,9 @@
 
 #adaptable-page-header-wrapper #main-navbar .action-menu .dropdown-toggle::after {
     border-bottom: 0;
-    border-left: .3em solid transparent;
-    border-right: .3em solid transparent;
-    border-top: .3em solid;
+    border-left: .5em solid transparent;
+    border-right: .5em solid transparent;
+    border-top: .5em solid;
     content: "";
     display: inline-block;
     height: 0;
@@ -540,7 +540,7 @@
     font-size: 1.2em;
 }
 
-#adaptable-page-header-wrapper #main-navbar .nav-item .nav-link .fa {
+#adaptable-page-header-wrapper #main-navbar .nav-item .nav-link .fa:not(.sections-menu) {
     margin-right: 2px;
 }
 
