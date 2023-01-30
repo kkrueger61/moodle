@@ -185,20 +185,6 @@ trait core_renderer_toolbox {
         return $sortedcourses;
     }
 
-
-
-    /**
-     * Returns the URL for the favicon.
-     *
-     * @return moodle_url The favicon Moodle URL.
-     */
-    public function favicon() {
-        if (!empty($this->page->theme->settings->favicon)) {
-            return \theme_adaptable\toolbox::get_setting_moodle_url('favicon', $this->page->theme);
-        }
-        return parent::favicon();
-    }
-
     /**
      * Returns settings as formatted text
      *
@@ -861,11 +847,12 @@ EOT;
      * Note: Not called directly by theme but by core in its way of setting the 'page button'
      *       attribute.  This version needed for 'Edit button keep position' in adaptable.js.
      *
-     * @param moodle_url $url The URL + params to send through when clicking the button
+     * @param moodle_url $url The URL + params to send through when clicking the button.
+     * @parmm string $method Not used.
      * @return string HTML the button
      * Written by G J Barnard
      */
-    public function edit_button(moodle_url $url) {
+    public function edit_button(moodle_url $url, string $method = 'post') {
         $url->param('sesskey', sesskey());
         if ($this->page->user_is_editing()) {
             $url->param('edit', 'off');
@@ -1447,7 +1434,7 @@ EOT;
      *
      * @return string Markup.
      */
-    public function navbar() {
+    public function navbar(): string {
         $items = $this->page->navbar->get_items();
         $breadcrumbseparator = $this->page->theme->settings->breadcrumbseparator;
 
@@ -1907,11 +1894,11 @@ EOT;
                     $data = theme_adaptable_get_course_activities();
                     foreach ($data as $modname => $modfullname) {
                         if ($modname === 'resources') {
-                            $icon = $this->pix_icon('icon', '', 'mod_page');
+                            $icon = $this->pix_icon('monologo', '', 'mod_page');
                             $branch->add($icon.$modfullname, new moodle_url('/course/resources.php',
                                 array('id' => $this->page->course->id)), $modfullname);
                         } else {
-                            $icon = $this->pix_icon('icon', '', $modname);
+                            $icon = $this->pix_icon('monologo', '', $modname);
                             $branch->add($icon.$modfullname, new moodle_url('/mod/'.$modname.'/index.php',
                                     array('id' => $this->page->course->id)), $modfullname);
                         }
@@ -2123,7 +2110,7 @@ EOT;
 
         if (!empty($sectionsformnenu)) { // Rare but possible!
             $branchtitle = get_string('sections', 'theme_adaptable');
-            $branchlabel = '<i class="icon fa fa-list-ol fa-lg"></i>'.$branchtitle;
+            $branchlabel = '<i class="icon sections-menu fa fa-list-ol fa-lg"></i>'.$branchtitle;
             $branch = $menu->add($branchlabel, null, $branchtitle, 100003);
 
             foreach ($sectionsformnenu as $sectionformenu) {
@@ -3549,5 +3536,21 @@ EOT;
         ];
 
         return $this->render_from_template('core/search_input_navbar', $data);
+    }
+
+    /**
+     * Returns the activity header if any.
+     *
+     * @return string HTML with the activity header if generated.
+     */
+    public function activity_header() {
+        $output = '';
+
+        $activityheadercontext = $this->page->activityheader->export_for_template($this);
+        if (!empty($activityheadercontext)) {
+            $output = $this->render_from_template('core/activity_header', $activityheadercontext);
+        }
+
+        return $output;
     }
 }

@@ -27,6 +27,8 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+$PAGE->set_secondary_navigation(false);
+
 /* Check if this is a course or module page and check setting to hide site title.
    If not one of these pages, by default show it (set $hidesitetitle to false). */
 if ( (strstr($PAGE->pagetype, 'course')) ||
@@ -189,7 +191,7 @@ echo $OUTPUT->standard_top_of_body_html();
         if ((isloggedin()) && ($PAGE->pagelayout != 'secure')) {
             // User icon.
             $userpic = $OUTPUT->user_picture($USER, array('link' => false, 'visibletoscreenreaders' => false,
-                'size' => 50, 'class' => 'userpicture'));
+                'size' => 35, 'class' => 'userpicture'));
             // User name.
             $username = format_string(fullname($USER));
 

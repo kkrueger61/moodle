@@ -75,6 +75,14 @@ if ($PAGE->theme->settings->hidefootersocial == 1) {
                     <?php echo $OUTPUT->standard_footer_html(); ?>
                 </div>
             </div>
+            <?php
+            $debug = $OUTPUT->debug_footer_html();
+            if (!empty($debug)) {
+                echo '<div class="row"><div class="col-12 my-md-0 my-2">';
+                echo $debug;
+                echo '</div>';
+            }
+            ?>
         </div>
     </div>
 </footer>

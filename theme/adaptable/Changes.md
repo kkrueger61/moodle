@@ -1,31 +1,111 @@
-Change Log in version 311.1.3 (2021081008)
+Change Log in version 401.0.1 (2022112300)
 ===========================================
-1. Fix 'Missing Activity Icons under 'This course' menu' - #286.
+1. Release candidate version for M4.1.
+2. Favicon setting now describes core 'core_admin | favicon' setting, under 'Site administration' -> 'Appearance' -> 'Logos'.
+   Please upload your existing Favicon to this new setting as Adaptable's has been removed.
+
+Change Log in version 400.1.4 (2022051207)
+===========================================
+1. Change course module name display, related to MDL-74272.
+2. Less than 992px responsive fix and tidy.
+3. Fix admin settings page 'Save changes' causing overflow.
+4. Fix admin settings title SCSS not applied.
+5. Change the following mod icons to Font Awesome 6.2.1 free ones:
+     Assign - fa-solid fa-file-pen
+     Assignment - fa-solid fa-file-signature
+     Book - fa-solid fa-book-open
+     Chat - fa-regular fa-comments
+     Choice - fa-solid fa-arrows-split-up-and-left
+     Data - fa-solid fa-database
+     Feedback - fa-regular fa-comment-dots
+     File - fa-regular fa-file
+     Folder - fa-regular fa-folder
+     Forum - fa-solid fa-people-group
+     Glossary - fa-solid fa-box-archive
+     IMScp - fa-solid fa-boxes-stacked
+     Label - fa-solid fa-tag
+     Lesson - fa-solid fa-chalkboard-user
+     LTI - fa-solid fa-puzzle-piece
+     Page - fa-solid fa-sheet-plastic
+     Quiz - fa-solid fa-person-circle-question
+     Resource - fa-regular fa-file
+     SCORM - fa-solid fa-box
+     Survey - fa-solid fa-square-poll-horizontal
+     URL - fa-solid fa-link
+     Wiki - fa-solid fa-circle-nodes
+     Workshop - fa-solid fa-people-arrows
+   Converted to PNG with Inkscape.
+
+Change Log in version 400.1.3 (2022051206)
+===========================================
+1. Fix header search icon colour.
+2. Fix 'Zoomin not operating on main region' - ref: https://moodle.org/mod/forum/discuss.php?d=437305#p1760772.
+3. Fixed semantic versioning 2.0.0 (https://semver.org/) for the release value, whereby the 'major' number is the Moodle core branch
+   number.  The 'version' property still needs to follow the Moodle way in order for the plugin to operate within the core API.
+4. Tidy social icons.
+5. Fix page heading button position.
+6. Fix 'Message badge colour' - ref: https://moodle.org/mod/forum/discuss.php?d=438886.
+7. Fix 'Header one long title underneath logo'.
+
+Change Log in version 4.0.1.2 (2022051205)
+===========================================
+1. Fix 'Assignment Description, Instruction & Additional File Not Showing' = ref: https://moodle.org/mod/forum/discuss.php?d=437100.
+
+Change Log in version 4.0.1.1 (2022051204)
+===========================================
+1. Fix 'Missing "View X responses" in choice module' - ref: https://moodle.org/mod/forum/discuss.php?d=436755.
 2. Fix 'OAuth 2 in wrong place on login form' - ref: https://moodle.org/mod/forum/discuss.php?d=436838.
 3. Fix 'No "region-main-box" identifier causing LTI module submission failure' - thanks to Sergey Kovzik for the report.
-4. Fix header search icon colour.
-5. Fix 'Zoomin not operating on main region' - ref: https://moodle.org/mod/forum/discuss.php?d=437305#p1760772.
-6. Fix 'Search input navbar styling'.
-7. Fix 'Header one long title underneath logo'.
-8. Fixed semantic versioning 2.0.0 (https://semver.org/) for the release value, whereby the 'major' number is the Moodle core branch
-   number.  The 'version' property still needs to follow the Moodle way in order for the plugin to operate within the core API.
+
+Change Log in version 4.0.1.0 (2022051203)
+===========================================
+1. Stable version for M4.0.
+
+Change Log in version 4.0.0.3 (2022051202)
+===========================================
+1. Removed non-functioning 'user_menu' method and supporting methods.
+2. Fix 'footer improperly closed div' - #283.
+3. Option to replace login form in header with login buttons for SSO - #281.
+
+Change Log in version 4.0.0.2 (2022051201)
+===========================================
+1. Fix 'My courses' page not rendering - ref: https://moodle.org/mod/forum/discuss.php?d=434718.
+2. Fix undefined property $gradeediting.
+3. Fix header two colour issues / icon padding - ref: https://moodle.org/mod/forum/discuss.php?d=434655#p1750208.  This means that
+   the setting 'headertextcolor2' as been removed, such that 'headertextcolor' will now operate on both styles for the non-navbar
+   portion of the header.  The CSS 'above-header' has been changed from an identifier to a class for this to bring even more
+   consistency.  A new identifier 'header1' as been created, just as there is an existing 'header2'.
+4. Fix 'course format plugins not working' - #277.  Note: This only removes code that prevents operation due to core API changes.
+5. Fix 'Login page' - ref: https://moodle.org/mod/forum/discuss.php?d=435248.
+
+Change Log in version 4.0.0.1 (2022051200)
+===========================================
+1. Removed 'coursesectionactivityuseadaptableicons' setting as M4.0 course format API prevents it having an effect.
+2. Course format API changes remove use of 'print_single_section_page' method.
+3. Fix user picture size.
+4. The M4.0 course format API prevents themes from overriding section and module output, this is now the full responsibility of the
+   course format.  The consequence of this means that the activity information code can no longer be called and used.  The tracker
+   issue MDL-73679 is an 'entry point' for understanding all of this and how course formats can override the output, but as
+   'get_output_classname()' in '/course/format/classes/base.php' only allows 'overriding' of the rendering classes for course
+   formats, then this is the 'why', whereas this sort of thing used to be in the core course renderer which the course format used
+   and could be overridden by the theme and the course format use that instance.
+5. Refactor broken footer logic.
+6. Fix missing debug information.
+7. Fix navbar search styling.
+8. No edit switch.
+9. Fix button font family - #276.
+10. Fix no assignment instructions - ref: https://moodle.org/mod/forum/discuss.php?d=434427#p1748150.
+11. Fix 'icon -> monologo' and menu spacing.
+12. Fix navbar cog down arrow icon.
+13. Remove double usage of 'icon' class on the 'This course' menu.
+14. Add 'unaddableblocks' setting that core code uses.
+15. State that the theme does not use the 'Course index'.
+16. Fix 'btn-icon' position - e.g. course 'Edit' on sections / modules.
+17. Activity styling.
 
 Change Log in version 3.11.1.2 (2021081007)
 ===========================================
 1. Fix 'Adaptable, sticky navbar and usertours' - https://moodle.org/mod/forum/discuss.php?d=434259.
-2. Refactor broken footer logic.
-3. Fix button font family - #276.
-4. Fix 'My courses' page not rendering - ref: https://moodle.org/mod/forum/discuss.php?d=434718.
-5. Fix undefined property $gradeediting.
-6. Fix header two colour issues / icon padding - ref: https://moodle.org/mod/forum/discuss.php?d=434655#p1750208.  This means that
-   the setting 'headertextcolor2' as been removed, such that 'headertextcolor' will now operate on both styles for the non-navbar
-   portion of the header.  The CSS 'above-header' has been changed from an identifier to a class for this to bring even more
-   consistency.  A new identifier 'header1' as been created, just as there is an existing 'header2'.
-7. Fix 'Login page' - ref: https://moodle.org/mod/forum/discuss.php?d=435248.
-8. Removed non-functioning 'user_menu' method and supporting methods.
-9. Fix 'footer improperly closed div' - #283.
-10. Fix 'login page regression' - #284.
-11. Option to replace login form in header with login buttons for SSO - #281.
 
 Change Log in version 3.11.1.1 (2021081006)
 ===========================================

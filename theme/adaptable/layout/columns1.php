@@ -40,6 +40,7 @@ require_once(dirname(__FILE__) . '/includes/header.php');
             <section id="region-main">
             <?php
             echo $OUTPUT->course_content_header();
+            echo $OUTPUT->activity_header();
             echo $OUTPUT->main_content();
             echo $OUTPUT->activity_navigation();
             echo $OUTPUT->course_content_footer();

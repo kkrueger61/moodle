@@ -25,6 +25,8 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+$PAGE->set_secondary_navigation(false);
+
 // Set HTTPS if needed.
 if (empty($CFG->loginhttps)) {
     $wwwroot = $CFG->wwwroot;

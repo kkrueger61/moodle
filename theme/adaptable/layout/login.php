@@ -60,7 +60,9 @@ echo '<div class="container outercont">';
                 echo $logintextendwrapper;
             }
 
+            echo '<div class="login-wrapper"><div class="login-container">';
             echo $OUTPUT->main_content();
+            echo '</div></div>';
 
             if (!empty($logintextboxbottom)) {
                 echo '<div class="my-1 my-sm-5"></div>';

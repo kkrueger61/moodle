@@ -86,7 +86,7 @@ if ($ADMIN->fulltree) {
     $name = 'theme_adaptable/favicon';
     $title = get_string('favicon', 'theme_adaptable');
     $description = get_string('favicondesc', 'theme_adaptable');
-    $setting = new admin_setting_configstoredfile($name, $title, $description, 'favicon');
+    $setting = new admin_setting_description($name, $title, $description);
     $page->add($setting);
 
     // Site title.
