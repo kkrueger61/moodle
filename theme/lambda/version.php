@@ -17,14 +17,14 @@
 /**
  *
  * @package   theme_lambda
- * @copyright 2023 redPIthemes
+ * @copyright 2023 krueger
  *
  */
 
 defined('MOODLE_INTERNAL') || die;
 
 $plugin->component = 'theme_lambda'; // Full name of the plugin (used for diagnostics)
-$plugin->release   = '1.98.41';
+$plugin->release   = '1.98.00';
 $plugin->version   = 2023012940; // The current module version (Date: YYYYMMDDXX)
 $plugin->maturity  = MATURITY_STABLE;
 $plugin->requires  = 2022041900; // Requires this Moodle version
