@@ -39,6 +39,29 @@ define('THEME_ADAPTABLE_DEFAULT_NEWSTICKERCOUNT', '1');
 define('THEME_ADAPTABLE_DEFAULT_SLIDERCOUNT', '3');
 
 /**
+ * Gets the pre SCSS for the theme.
+ *
+ * @param theme_config $theme The theme configuration object.
+ * @return string SCSS.
+ */
+function theme_adaptable_pre_scss($theme) {
+    $prescss = '$courseindex-link-color: '.
+        \theme_adaptable\toolbox::get_config_setting('courseindexitemcolor', '#495057', $theme->name).';';
+    $prescss .= '$courseindex-link-hover-color: '.
+        \theme_adaptable\toolbox::get_config_setting('courseindexitemhovercolor', '#e6e6e6', $theme->name).';';
+    $prescss .= '$courseindex-link-color-selected: '.
+        \theme_adaptable\toolbox::get_config_setting('courseindexpageitemcolor', '#ffffff', $theme->name).';';
+    $prescss .= '$courseindex-item-page-bg: '.
+        \theme_adaptable\toolbox::get_config_setting('courseindexpageitembgcolor', '#0f6cbf', $theme->name).';';
+    $prescss .= '$drawer-bg-color: #fff;';  // Currently no setting for 'block region' background.
+    $prescss .= '$input-btn-focus-color: rgba('.
+        \theme_adaptable\toolbox::get_config_setting('buttonfocuscolor', '#0f6cc0', $theme->name).', '.
+        \theme_adaptable\toolbox::get_config_setting('buttonfocuscoloropacity', '0.75', $theme->name).');';
+
+    return $prescss;
+}
+
+/**
  * Returns the main SCSS content.
  *
  * @param theme_config $theme The theme config object.
@@ -56,7 +79,8 @@ function theme_adaptable_get_main_scss_content($theme) {
 
     $scss .= theme_boost_get_main_scss_content($boosttheme);
 
-    $scss .= file_get_contents($CFG->dirroot.'/theme/adaptable/scss/main.scss');
+    $basedir = (!empty($CFG->themedir)) ? $CFG->themedir : $CFG->dirroot.'/theme';
+    $scss .= file_get_contents($basedir.'/adaptable/scss/main.scss');
 
     $settingssheets = array(
         'adaptable',
@@ -76,7 +100,7 @@ function theme_adaptable_get_main_scss_content($theme) {
 
     $settingsscss = '';
     foreach ($settingssheets as $settingsheet) {
-        $settingsscss .= file_get_contents($CFG->dirroot.'/theme/adaptable/scss/settings/'.$settingsheet.'.scss');
+        $settingsscss .= file_get_contents($basedir.'/adaptable/scss/settings/'.$settingsheet.'.scss');
     }
 
     $scss .= theme_adaptable_process_scss($settingsscss, $theme);
@@ -131,6 +155,7 @@ function theme_adaptable_process_scss($scss, $theme) {
     $defaults = array(
         '[[setting:linkcolor]]' => '#51666C',
         '[[setting:linkhover]]' => '#009688',
+        '[[setting:dimmedtextcolor]]' => '#6a737b',
         '[[setting:maincolor]]' => '#3A454b',
         '[[setting:backcolor]]' => '#FFFFFF',
         '[[setting:regionmaincolor]]' => '#FFFFFF',
@@ -230,8 +255,6 @@ function theme_adaptable_process_scss($scss, $theme) {
         '[[setting:menuhovercolor]]' => '#00B3A1',
         '[[setting:menubordercolor]]' => '#00B3A1',
         '[[setting:mobilemenubkcolor]]' => '#F9F9F9',
-        '[[setting:mobileslidebartabbkcolor]]' => '#F9F9F9',
-        '[[setting:mobileslidebartabiconcolor]]' => '#000000',
         '[[setting:navbardropdownborderradius]]' => '0',
         '[[setting:navbardropdownhovercolor]]' => '#EEE',
         '[[setting:navbardropdowntextcolor]]' => '#007',
@@ -316,7 +339,6 @@ function theme_adaptable_process_scss($scss, $theme) {
         '[[setting:forumheaderbackgroundcolor]]' => '#ffffff',
         '[[setting:forumbodybackgroundcolor]]' => '#ffffff',
         '[[setting:introboxbackgroundcolor]]' => '#ffffff',
-        '[[setting:showyourprogress]]' => 'none',
         '[[setting:tabbedlayoutdashboardcolorselected]]' => '#06c',
         '[[setting:tabbedlayoutdashboardcolorunselected]]' => '#eee',
         '[[setting:tabbedlayoutcoursepagetabcolorselected]]' => '#06c',
@@ -504,6 +526,56 @@ function theme_adaptable_set_customcss($css, $customcss) {
 }
 
 /**
+ * Serves the H5P Custom CSS.
+ *
+ * @param string $filename The filename.
+ * @param theme_config $theme The theme config object.
+ */
+function theme_adaptable_serve_hvp_css($filename, $theme) {
+    global $CFG, $PAGE;
+    require_once($CFG->dirroot.'/lib/configonlylib.php'); // For min_enable_zlib_compression().
+
+    $PAGE->set_context(context_system::instance());
+    $themename = $theme->name;
+
+    $content = theme_adaptable_get_setting('hvpcustomcss');
+    $md5content = md5($content);
+    $md5stored = get_config('theme_'.$themename, 'hvpccssmd5');
+    if ((empty($md5stored)) || ($md5stored != $md5content)) {
+        // Content changed, so the last modified time needs to change.
+        set_config('hvpccssmd5', $md5content, 'theme_'.$themename);
+        $lastmodified = time();
+        set_config('hvpccsslm', $lastmodified, 'theme_'.$themename);
+    } else {
+        $lastmodified = get_config('theme_'.$themename, 'hvpccsslm');
+        if (empty($lastmodified)) {
+            $lastmodified = time();
+        }
+    }
+
+    // Sixty days only - the revision may get incremented quite often.
+    $lifetime = 60 * 60 * 24 * 60;
+
+    header('HTTP/1.1 200 OK');
+
+    header('Etag: "'.$md5content.'"');
+    header('Content-Disposition: inline; filename="'.$filename.'"');
+    header('Last-Modified: '.gmdate('D, d M Y H:i:s', $lastmodified).' GMT');
+    header('Expires: '.gmdate('D, d M Y H:i:s', time() + $lifetime).' GMT');
+    header('Pragma: ');
+    header('Cache-Control: public, max-age='.$lifetime);
+    header('Accept-Ranges: none');
+    header('Content-Type: text/css; charset=utf-8');
+    if (!min_enable_zlib_compression()) {
+        header('Content-Length: '.strlen($content));
+    }
+
+    echo $content;
+
+    die;
+}
+
+/**
  * Set display of course contacts on front page tiles
  * @param string $css
  * @param string $display
@@ -596,8 +668,10 @@ function theme_adaptable_get_setting($setting, $format = false) {
         return $theme->settings->$setting;
     } else if ($format === 'format_text') {
         return format_text($theme->settings->$setting, FORMAT_PLAIN);
+    } else if ($format === 'format_moodle') {
+        return format_text($theme->settings->$setting, FORMAT_MOODLE);
     } else if ($format === 'format_html') {
-        return format_text($theme->settings->$setting, FORMAT_HTML, array('trusted' => true));
+        return format_text($theme->settings->$setting, FORMAT_HTML);
     } else {
         return format_string($theme->settings->$setting);
     }
@@ -635,6 +709,8 @@ function theme_adaptable_pluginfile($course, $cm, $context, $filearea, $args, $f
             return $theme->setting_file_serve('frontpagerendererdefaultimage', $args, $forcedownload, $options);
         } else if ($filearea === 'headerbgimage') {
             return $theme->setting_file_serve('headerbgimage', $args, $forcedownload, $options);
+        } else if ($filearea === 'hvp') {
+            theme_adaptable_serve_hvp_css($args[1], $theme);
         } else if ($filearea === 'loginbgimage') {
             return $theme->setting_file_serve('loginbgimage', $args, $forcedownload, $options);
         } else if (preg_match("/^p[1-9][0-9]?$/", $filearea)) {
@@ -722,32 +798,6 @@ function theme_adaptable_remove_site_fullname($heading) {
     $header = preg_replace("/^".$SITE->fullname."/", "", $heading);
 
     return $header;
-}
-
-/**
- * Generate theme grid.
- * @param bool $left
- * @param bool $hassidepost
- */
-function theme_adaptable_grid($left, $hassidepost) {
-    if ($hassidepost) {
-        if ('rtl' === get_string('thisdirection', 'langconfig')) {
-            $left = !$left; // Invert.
-        }
-        $regions = array('content' => 'col-9');
-        $regions['blocks'] = 'col-3';
-        if ($left) {
-            $regions['direction'] = ' flex-row-reverse';
-        } else {
-            $regions['direction'] = ' flex-row';
-        }
-    } else {
-        $regions = array('content' => 'col-12');
-        $regions['direction'] = '';
-        return $regions;
-    }
-
-    return $regions;
 }
 
 /**

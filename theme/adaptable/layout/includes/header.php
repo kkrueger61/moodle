@@ -18,6 +18,7 @@
  * Version details
  *
  * @package   theme_adaptable
+ * @copyright 2023 G J Barnard (http://moodle.org/user/profile.php?id=442195)
  * @copyright 2015-2019 Jeremy Hopkins (Coventry University)
  * @copyright 2015-2019 Fernando Acedo (3-bits.com)
  * @copyright 2017-2019 Manoj Solanki (Coventry University)
@@ -27,7 +28,11 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$PAGE->set_secondary_navigation(false);
+$bodyclasses = array();
+$bodyclasses[] = 'theme_adaptable';
+$bodyclasses[] = 'two-column';
+
+$pageclasses = array();
 
 /* Check if this is a course or module page and check setting to hide site title.
    If not one of these pages, by default show it (set $hidesitetitle to false). */
@@ -40,17 +45,15 @@ if ( (strstr($PAGE->pagetype, 'course')) ||
 
 // Screen size.
 theme_adaptable_initialise_zoom();
-$setzoom = theme_adaptable_get_zoom();
+$bodyclasses[] = theme_adaptable_get_zoom();
 
 theme_adaptable_initialise_full();
-$setfull = theme_adaptable_get_full();
+$bodyclasses[] = theme_adaptable_get_full();
 
 $bsoptionsdata = array('data' => array());
 
 // Main navbar.
-if (isset($PAGE->theme->settings->stickynavbar) && $PAGE->theme->settings->stickynavbar == 1
-    && $PAGE->pagetype != "grade-report-grader-index" && $PAGE->bodyid != "page-grade-report-grader-index") {
-    $fixedheader = true;
+if (isset($PAGE->theme->settings->stickynavbar) && $PAGE->theme->settings->stickynavbar == 1) {
     $bsoptionsdata['data']['stickynavbar'] = true;
 } else {
     $bsoptionsdata['data']['stickynavbar'] = false;
@@ -59,7 +62,6 @@ if (isset($PAGE->theme->settings->stickynavbar) && $PAGE->theme->settings->stick
 // JS calls.
 $PAGE->requires->js_call_amd('theme_adaptable/adaptable', 'init');
 $PAGE->requires->js_call_amd('theme_adaptable/bsoptions', 'init', $bsoptionsdata);
-$PAGE->requires->js_call_amd('theme_adaptable/drawer', 'init');
 
 // Layout.
 $left = (!right_to_left());  // To know if to add 'pull-right' and 'desktop-first-column' classes in the layout for LTR.
@@ -92,6 +94,9 @@ if ((empty($headerbg)) && (!empty($PAGE->theme->settings->headerbgimage))) {
     $headerbg = ' class="headerbgimage" style="background-image: ' .
     'url(\''.$PAGE->theme->setting_file_url('headerbgimage', 'headerbgimage').'\');"';
 }
+if (!empty($headerbg)) {
+    $bodyclasses[] = 'has-header-bg';
+}
 
 /* Choose the header style.  There styles available are:
    "style1"  (original header)
@@ -103,18 +108,18 @@ if (!empty($PAGE->theme->settings->headerstyle)) {
 } else {
     $adaptableheaderstyle = "style1";
 }
+$bodyclasses[] = 'header-'.$adaptableheaderstyle;
 
 // Social icons class.
 $showicons = $PAGE->theme->settings->blockicons;
 if ($showicons == 1) {
-    $showiconsclass = "showblockicons";
-} else {
-    $showiconsclass = " ";
+    $bodyclasses[] = 'showblockicons';
 }
 
-$standardscreenwidthclass = 'standard';
 if (!empty($PAGE->theme->settings->standardscreenwidth)) {
-    $standardscreenwidthclass = $PAGE->theme->settings->standardscreenwidth;
+    $bodyclasses[] = $PAGE->theme->settings->standardscreenwidth;
+} else {
+    $bodyclasses[] = 'standard';
 }
 
 // HTML header.
@@ -129,37 +134,82 @@ echo $OUTPUT->doctype();
 // Include header.
 require_once(dirname(__FILE__) . '/head.php');
 
-// If it is a mobile and the header is not hidden or it is a desktop there will be a page header.
-$pageheader = 'has-page-header';
+$left = $PAGE->theme->settings->blockside;
 
-$hasheaderbg = '';
-if (!empty($headerbg)) {
-    $hasheaderbg = 'has-header-bg';
+$courseindexheader = false;
+switch ($PAGE->pagelayout) {
+    case 'base':
+    case 'standard':
+    case 'course':
+    case 'coursecategory':
+    case 'incourse':
+    case 'frontpage':
+    case 'admin':
+    case 'mycourses':
+    case 'mydashboard':
+    case 'mypublic':
+    case 'report':
+        require_once(dirname(__FILE__) . '/courseindexheader.php');
+        $courseindexheader = true;
+    break;
+    default:
+        $courseindex = false;
+}
+
+if ($sidepostdrawer) {
+    require_once(dirname(__FILE__) . '/sidepostheader.php');
+} else {
+    $hassidepost = false;
+}
+
+if ($courseindexheader) {
+    if ($courseindexopen) {
+        $bodyclasses[] = 'drawer-open-index';
+    }
+}
+
+if (($courseindex) || ($hassidepost)) {
+    $bodyclasses[] = 'uses-drawers';
+    $pageclasses[] = 'drawers';
 }
 
 $nomobilenavigation = '';
 if (!empty($PAGE->theme->settings->responsivesectionnav)) {
     $nomobilenavigation = 'nomobilenavigation';
+    $bodyclasses[] = $nomobilenavigation;
 }
+
 ?>
-<body <?php echo $OUTPUT->body_attributes(array('theme_adaptable', 'two-column', $setzoom, 'header-'.$adaptableheaderstyle,
-    $pageheader, $hasheaderbg, $nomobilenavigation)); ?>>
+<body <?php echo $OUTPUT->body_attributes($bodyclasses); ?>>
 
 <?php
 echo $OUTPUT->standard_top_of_body_html();
-
-// Development or wrong moodle version alert.
-// echo $OUTPUT->get_dev_alert();.
 ?>
 
 <div id="page-wrapper">
-    <div id="page" class="<?php echo "$setfull $showiconsclass $standardscreenwidthclass"; ?>">
     <?php
-    echo $OUTPUT->get_alert_messages();
+    if (!empty($courseindexmarkup)) {
+        echo $courseindexmarkup;
+    }
+    if (!empty($sidepostmarkup)) {
+        echo $sidepostmarkup;
+    }
+    if (!$bsoptionsdata['data']['stickynavbar']) {
+        echo '<div id="page" class="'.implode(' ', $pageclasses).'">';
+    }
 
     $headercontext = [
         'output' => $OUTPUT
     ];
+
+    if (!empty($nomobilenavigation)) {
+        $primary = new theme_adaptable\output\navigation\primary($PAGE);
+        $renderer = $PAGE->get_renderer('core');
+        $primarymenu = $primary->export_for_template($renderer);
+        $headercontext['mobileprimarynav'] = $primarymenu['mobileprimarynav'];
+        $headercontext['mobileprimarynavicon'] = \theme_adaptable\toolbox::getfontawesomemarkup('bars');
+        $headercontext['hasmobileprimarynav'] = true;
+    }
 
     if ((!isloggedin() || isguestuser()) && ($PAGE->pagetype != "login-index")) {
         if ($PAGE->theme->settings->displaylogin != 'no') {
@@ -240,10 +290,6 @@ echo $OUTPUT->standard_top_of_body_html();
             'toolsmenu' => ($PAGE->theme->settings->enabletoolsmenus)
         ];
 
-        if ($PAGE->theme->settings->enabletoolsmenus) {
-            $headercontext['shownavbar']['toolsmenudrawer'] = $OUTPUT->tools_menu('tools-menu-drawer');
-        }
-
         $navbareditsettings = $PAGE->theme->settings->editsettingsbutton;
         $headercontext['shownavbar']['showcog'] = true;
         $showeditbuttons = false;
@@ -273,36 +319,6 @@ echo $OUTPUT->standard_top_of_body_html();
         }
 
         if (isloggedin()) {
-            if (!empty($this->page->theme->settings->enableshowhideblocks)) {
-                $zoomside = ((!empty($this->page->theme->settings->blockside)) &&
-                    ($this->page->theme->settings->blockside == 1)) ? 'left' : 'right';
-                $hidetitle = get_string('hideblocks', 'theme_adaptable');
-                $showtitle = get_string('showblocks', 'theme_adaptable');
-                if ($setzoom == 'zoomin') { // Blocks not shown.
-                    $zoominicontitle = $showtitle;
-                    if ($zoomside == 'right') {
-                        $icontype = 'outdent';
-                    } else {
-                        $icontype = 'indent';
-                    }
-                } else {
-                    $zoominicontitle = $hidetitle;
-                    if ($zoomside == 'right') {
-                        $icontype = 'indent';
-                    } else {
-                        $icontype = 'outdent';
-                    }
-                }
-                $headercontext['shownavbar']['showhideblocks'] = true;
-                $headercontext['shownavbar']['showhideblockszoomside'] = $zoomside;
-                $headercontext['shownavbar']['showhideblockszoominicontitle'] = $zoominicontitle;
-                $headercontext['shownavbar']['showhideblockshidetitle'] = $hidetitle;
-                $headercontext['shownavbar']['showhideblocksshowtitle'] = $showtitle;
-                $headercontext['shownavbar']['showhideblocksicontype'] = $icontype;
-                $headercontext['shownavbar']['showhideblockstext'] = ($PAGE->theme->settings->enableshowhideblockstext);
-
-                $PAGE->requires->js_call_amd('theme_adaptable/zoomin', 'init');
-            }
             if ($PAGE->theme->settings->enablezoom) {
                 $headercontext['shownavbar']['enablezoom'] = true;
                 $headercontext['shownavbar']['enablezoomshowtext'] = ($PAGE->theme->settings->enablezoomshowtext);
@@ -366,6 +382,7 @@ echo $OUTPUT->standard_top_of_body_html();
 
         echo $OUTPUT->render_from_template('theme_adaptable/headerstyleone', $headercontext);
     } else if ($adaptableheaderstyle == "style2") {
+        $headercontext['responsiveheader'] = $PAGE->theme->settings->responsiveheader;
         if (!empty($PAGE->theme->settings->pageheaderlayouttwo)) {
             $headercontext['pageheaderoriginal'] = ($PAGE->theme->settings->pageheaderlayouttwo == 'original');
         } else {
@@ -382,6 +399,13 @@ echo $OUTPUT->standard_top_of_body_html();
 
         echo $OUTPUT->render_from_template('theme_adaptable/headerstyletwo', $headercontext);
     }
-
-    // Display News Ticker.
-    echo $OUTPUT->get_news_ticker();
+    if ($bsoptionsdata['data']['stickynavbar']) {
+        echo '<div id="page" class="'.implode(' ', $pageclasses).'">';
+    }
+    if (!empty($courseindextogglemarkup)) {
+        echo $courseindextogglemarkup;
+    }
+    if (!empty($sideposttogglemarkup)) {
+        echo $sideposttogglemarkup;
+    }
+    echo $OUTPUT->get_alert_messages();

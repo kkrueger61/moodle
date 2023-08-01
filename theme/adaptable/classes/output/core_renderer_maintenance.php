@@ -27,8 +27,6 @@
 
 namespace theme_adaptable\output;
 
-defined('MOODLE_INTERNAL') || die;
-
 /**
  * The core maintenance renderer.
  *

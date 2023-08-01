@@ -28,11 +28,13 @@ defined('MOODLE_INTERNAL') || die;
 
 // Include header.
 require_once(dirname(__FILE__) . '/includes/header.php');
+$PAGE->set_secondary_navigation(false);
 
 ?>
 
-<div class="container outercont">
+<div id="maincontainer" class="container outercont">
     <?php
+        echo $OUTPUT->get_news_ticker();
         echo $OUTPUT->page_navbar();
     ?>
     <div id="page-content" class="row">

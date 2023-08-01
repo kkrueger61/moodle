@@ -1,3 +1,46 @@
+Change Log in version 401.1.5 (2022112306)
+===========================================
+1. Fix zoom after header move in markup.
+2. Fix drawer positions when 'stickynavbar' is off.
+3. Remove setting 'theme_adaptable/showyourprogress' - Thanks to Eric Richer for the patch - #6.
+
+Change Log in version 401.1.4 (2022112305)
+===========================================
+1. Change HTML based settings to use Moodle format for greater flexibility and don't trust user input!
+2. Fix 'Course index' on the right for the Grader Report.
+3. Fix 'Frontpage ticker location'.
+4. Improvements to the dynamic header functionality.
+5. Improve bsoptions.js.
+6. Reduce page load adjustment issues.
+7. Drawer open button improvement.
+8. Fix drawer position on grader report page.
+9. Add secondary navigation.
+10. Fix 'Use $CFG->themedir break SCSS inclusion' - #273.
+
+Change Log in version 401.1.3 (2022112304)
+===========================================
+1. Fix 'Not Adaptable my courses and missing help menu's on mobile navigation'.
+2. Fix 'Piwik code is asking for string from local_analytics' - #5.
+3. Fix 'blockicons setting not being applied to the side post drawer'.
+
+Change Log in version 401.1.2 (2022112303)
+===========================================
+1. Fix 'blockside' setting not being applied to the course index and side post.
+2. Fix 'No mobile navigation' on navbar.
+
+Change Log in version 401.1.1 (2022112302)
+===========================================
+1. Layout style tidy.
+2. Change to using 'Course index' and 'Block drawer'.
+
+Change Log in version 401.1.0 (2022112301)
+===========================================
+1. Add new 'dimmedtextcolor' setting for the 'dimmed_text' CSS class - #290.
+2. Fix missing log causing JS error on cache purge.
+3. Fix XSS issue.
+4. Add H5P custom CSS support, 'hvpcustomcss' setting on the 'Custom CSS & JS' settings tab, for both core
+   and [mod_hvp](https://moodle.org/plugins/mod_hvp) modules.
+
 Change Log in version 401.0.1 (2022112300)
 ===========================================
 1. Release candidate version for M4.1.

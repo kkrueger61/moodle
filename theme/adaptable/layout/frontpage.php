@@ -27,18 +27,16 @@
 
 defined('MOODLE_INTERNAL') || die;
 
-// Let's go to include first the common header file.
-require_once(dirname(__FILE__) . '/includes/header.php');
-
-// And now we go to create the main layout.
-$left = $PAGE->theme->settings->blockside;
+$sidepostdrawer = false;
 if (($PAGE->theme->settings->frontpageuserblocksenabled) || (is_siteadmin($USER))) {
-    $hassidepost = $PAGE->blocks->region_has_content('side-post', $OUTPUT);
-} else {
-    $hassidepost = false;
+    $sidepostdrawer = true;
 }
 
-$regions = theme_adaptable_grid($left, $hassidepost);
+// Let's go to include first the common header file.
+require_once(dirname(__FILE__) . '/includes/header.php');
+$PAGE->set_secondary_navigation(false);
+
+echo $OUTPUT->get_news_ticker();
 
 // Let's include the images slider if enabled.
 if (!empty($PAGE->theme->settings->sliderenabled)) {
@@ -53,7 +51,7 @@ if (!empty($PAGE->theme->settings->infobox)) {
         echo '<div id="theinfo" class="container">';
     }
     echo '<div class="row">';
-    echo $OUTPUT->get_setting('infobox', 'format_html');
+    echo $OUTPUT->get_setting('infobox', 'format_moodle');
     echo '</div>';
     echo '</div>';
 }
@@ -80,20 +78,20 @@ if (!empty($PAGE->theme->settings->infobox2)) {
         echo '<div id="theinfo2" class="container">';
     }
     echo '<div class="row">';
-    echo $OUTPUT->get_setting('infobox2', 'format_html');
+    echo $OUTPUT->get_setting('infobox2', 'format_moodle');
     echo '</div>';
     echo '</div>';
 }
 
 // The main content goes here.
 ?>
-<div class="container outercont">
-    <div id="page-content" class="row<?php echo $regions['direction'];?>">
+<div id="maincontainer" class="container outercont">
+    <div id="page-content" class="row">
         <div id="page-navbar" class="col-12">
             <nav class="breadcrumb-button"><?php echo $OUTPUT->page_heading_button(); ?></nav>
         </div>
 
-        <div id="region-main-box" class="<?php echo $regions['content'];?>">
+        <div id="region-main-box" class="col-12">
             <section id="region-main">
             <?php
             echo $OUTPUT->course_content_header();
@@ -102,15 +100,9 @@ if (!empty($PAGE->theme->settings->infobox2)) {
             ?>
             </section>
         </div>
-        <?php
-        if ($hassidepost) {
-            echo $OUTPUT->blocks('side-post', $regions['blocks'].' d-print-none ');
-        }
-        ?>
     </div>
 
 <?php
-
 // Let's show the hidden blocks region ONLY for administrators.
 if (is_siteadmin()) {
 ?>

@@ -40,47 +40,16 @@
 }
 
 // Remove caret from main navbar menu.
-#adaptable-page-header-wrapper #main-navbar .dropdown-toggle::after,
-#adaptable-page-header-wrapper #nav-drawer .dropdown-toggle::after {
+#adaptable-page-header-wrapper #main-navbar .dropdown-toggle::after {
     content: none;
 }
 
-.adaptable-page-header-wrapper#affix {
-    top: 0;
-    width: 100%;
-    z-index: 1010;
-}
-
-// General menu styling.
-
-// Sticky navbar.
-
-// The sticky class is added to the navbar with JS when it reaches its scroll position.
-#adaptable-page-header-wrapper .adaptable-navbar-sticky {
-    position: fixed;
-    top: 0;
-    width: 100%;
-}
-
-// Add some top padding to the page content to prevent sudden quick movement (as the navigation bar gets a new position at the top of the page (position:fixed and top:0) */
-#adaptable-page-header-wrapper .adaptable-navbar-sticky + .adaptable-navbar-sticky-content-padding {
-    padding-top: 60px;
-}
-
-// Page content */
-#adaptable-page-header-wrapper .adaptable-navbar-sticky-content-padding {
-    padding: 16px;
-}
-
-
-#adaptable-page-header-wrapper .navbar-nav .dropdown li a i,
-#adaptable-page-header-wrapper .above-header a i {
-    margin-right: 2px;
-    text-align: center;
-}
-
-#adaptable-page-header-wrapper .above-header a i {
-    width: 22px;
+#adaptable-page-header-wrapper {
+    .navbar-nav .dropdown li a .icon,
+    .above-header a .icon {
+        margin-right: 2px;
+        text-align: center;
+    }
 }
 
 // New main navbar styling */
@@ -195,56 +164,6 @@
     margin-top: 2px;
 }
 
-// New menus styles */
-.newmenus {
-    font-size: [[setting:topmenufontsize]];
-    height: 26px;
-    margin-left: 20px;
-    position: relative;
-}
-
-.newmenus .dropdown-menu .dropdown-menu {
-    left: 100%;
-}
-
-.newmenus .dropdown-toggle {
-    background-color: transparent !important;
-    color: [[setting:headertextcolor]] !important;
-}
-
-.newmenus .dropdown-menu li a {
-    color: [[setting:maincolor]] !important;
-    font-size: 13px;
-    font-weight: 400;
-    padding: 3px 10px;
-}
-
-.newmenus .dropdown-menu li:hover a {
-    background-color: #eee;
-}
-
-.newmenus .dropdown-toggle:hover,
-.newmenus .dropdown-toggle:active,
-.pull-left .usermenu2.nav a:hover {
-    background-color: transparent !important;
-}
-
-.newmenus .dropdown-toggle::after {
-    color: [[setting:headertextcolor]];
-    content: "\f107";
-    font-family: "Font Awesome";
-    font-weight: normal;
-    margin-left: 5px;
-}
-
-.newmenus .dropdown-menu .dropdown-toggle::after {
-    color: transparent;
-}
-
-.menutitle {
-    height: 100%;
-}
-
 // The Overlay (background) */
 .overlaymenu {
     background-color: rgb(0,0,0); // Black fallback color.
@@ -354,10 +273,6 @@
 #region-main-settings-menu .dropdown-menu {
     max-height: calc(100vh - 200px);
     overflow-y: auto;
-}
-
-.adaptable-navbar-sticky #region-main-settings-menu .dropdown-menu {
-    max-height: calc(100vh - 44px);
 }
 
 .dropdown-menu.fade {
@@ -525,19 +440,10 @@
     #adaptable-page-header-wrapper .above-header .btco-hover-menu ul ul.dropdown-menu {
         min-width: 60px;
     }
-
-    #adaptable-page-header-wrapper #header1.above-header .btco-hover-menu ul [id^='langmenu'] {
-        min-width: 135px;
-    }
 }
 
 .nav-link img.userpicture {
     margin-right: 0;
-}
-
-
-#adaptable-page-header-wrapper button[aria-controls="nav-drawer"] {
-    font-size: 1.2em;
 }
 
 #adaptable-page-header-wrapper #main-navbar .nav-item .nav-link .fa:not(.sections-menu) {
@@ -551,17 +457,6 @@
 
 #adaptable-page-header-wrapper #main-navbar .nav-item i.only {
     padding-right: 0;
-}
-
-#adaptable-page-header-wrapper #adaptable-page-header-nav-drawer button {
-    border: 0;
-    background: none;
-    color: [[setting:headertextcolor]];
-    font-size: 1.5em;
-}
-
-#adaptable-page-header-nav-drawer button {
-    cursor: pointer;
 }
 
 #adaptable-page-header-wrapper .context-header-settings-menu .icon {

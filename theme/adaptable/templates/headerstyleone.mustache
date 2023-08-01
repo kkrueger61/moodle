@@ -21,33 +21,34 @@
 
     Example context (json):
     {
+        "hasmobileprimarynav": true,
         "headerbg": "",
-        "sitelogo": "",
-        "sitetitle": "Adaptable",
-        "shownavbar": true,
-        "responsivesearchicon": "",
         "langmenu": false,
         "loginoruser": "",
         "menuslinkright": false,
+        "mobileprimarynavicon": "Markup",
         "pageheaderoriginal": true,
-        "topmenus": "",
+        "responsiveheader": "d-none d-lg-block",
+        "responsivesearchicon": "",
+        "searchandsocialheader": "",
         "searchandsocialnavbar": "",
         "searchandsocialnavbarextra": "",
-        "searchandsocialheader": ""
+        "shownavbar": true,
+        "sitelogo": "",
+        "sitetitle": "Adaptable",
+        "topmenus": ""
     }
 }}
 <header id="adaptable-page-header-wrapper"{{{headerbg}}}>
-    <div id="header1" class="above-header stickything">
+    <div id="header1" class="above-header">
         <div class="container">
             <nav class="navbar navbar-expand btco-hover-menu">
-                {{#shownavbar}}
-                <div id="adaptable-page-header-nav-drawer" data-region="drawer-toggle" class="d-lg-none mr-3">
-                    <button id="drawer" aria-expanded="false" aria-controls="nav-drawer" type="button" class="nav-link float-sm-left mr-1" data-side="left">
-                        <i class="fa fa-bars fa-fw" aria-hidden="true"></i>
-                        <span class="sr-only">{{#str}}sidepanel{{/str}}</span>
-                    </button>
-                </div>
-                {{/shownavbar}}
+                {{#hasmobileprimarynav}}
+                <button class="navbar-toggler nav-link aabtn d-block d-lg-none px-1 my-1 border-0" data-toggler="drawers" data-action="toggle" data-target="theme_adaptable-drawers-primary">
+                    {{{mobileprimarynavicon}}}
+                    <span class="sr-only">{{#str}}sidepanel, core{{/str}}</span>
+                </button>
+                {{/hasmobileprimarynav}}
 
                 <div class="collapse navbar-collapse">
                 {{^menuslinkright}}
@@ -64,7 +65,6 @@
                         </li>
                         {{/searchandsocialnavbar}}
 
-                        {{! Remove Messages and Notifications icons when no navbar. }}
                         {{#shownavbar}}
                         <li id="nav-popover-container" class="my-auto mx-md-1 d-flex">{{{output.navbar_plugin_output}}}</li>
                         {{/shownavbar}}
@@ -102,7 +102,7 @@
             {{/pageheaderoriginal}}
 
             {{^pageheaderoriginal}}
-            <div class="col-lg-8">
+            <div class="col-8">
                 <div class="d-flex justify-content-between align-items-center h-100 bd-highlight">
                     {{#sitetitle}}
                         {{{sitetitle}}}
@@ -112,7 +112,7 @@
                     {{/searchandsocialheader}}
                 </div>
             </div>
-            <div class="col-lg-4 p-0">
+            <div class="col-4 p-0">
                 {{#sitelogo}}
                 <div class="d-flex justify-content-end bd-highlight">
                     {{{sitelogo}}}
@@ -137,3 +137,8 @@
     {{/shownavbar}}
 
 </header>
+
+{{#hasmobileprimarynav}}
+{{< theme_adaptable/primary-drawer-mobile }}
+{{/ theme_adaptable/primary-drawer-mobile }}
+{{/hasmobileprimarynav}}

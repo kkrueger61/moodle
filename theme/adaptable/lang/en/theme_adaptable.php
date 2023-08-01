@@ -156,7 +156,7 @@ $string['themereadme'] = 'Readme';
 
 // Ticker.
 $string['tickersettings'] = 'News ticker';
-$string['tickersettingsheading'] = 'Setup news ticker on front page. See the layout <a href="./../theme/adaptable/pix/layout.png" target="_blank"> here</a>';
+$string['tickersettingsheading'] = 'Setup news ticker on front page.';
 $string['tickerdesc'] = 'Here you can set a news ticker to run across the front page of your Moodle site.
   It is intended as a less intrusive alternative to the slider taking up very little space.
   To setup your ticker simply enter a paragraph list and include any hyperlinks you need to in that text.
@@ -190,7 +190,7 @@ $string['tickerfullscreen'] = 'Full screen width';
 
 // Slideshow.
 $string['slideshowsettings'] = 'Slideshow';
-$string['slideshowsettingsheading'] = 'Customize the carousel on the front page. See the layout <a href="./../theme/adaptable/pix/layout.png" target="_blank"> here</a>';
+$string['slideshowsettingsheading'] = 'Customize the carousel on the front page.';
 $string['slideshowdesc'] = 'Upload the images, add the links and description for the carousel on the front page.';
 
 $string['sliderimage'] = 'Slider picture';
@@ -334,7 +334,7 @@ $string['sidebaricon'] = 'Show / hide the sidebar';
 
 // Marketing Blocks & Info Box.
 $string['marketingsettings'] = 'Marketing blocks';
-$string['marketingsettingsheading'] = 'Customize the marketing blocks that appear on the front page. See the layout <a href="./../theme/adaptable/pix/layout.png" target="_blank"> here</a>';
+$string['marketingsettingsheading'] = 'Customize the marketing blocks that appear on the front page.';
 $string['marketingdesc'] = 'There are two full width info boxes with differing styles you can use.<br>In addition to this there is a layout builder allowing you to decide how many blocks you need and define your own layout.<br>Please see the \'Readme\' section on the \'Information\' settings tab for additional information.';
 
 $string['marketingbuilderheading'] = 'Marketing block layout builder';
@@ -375,7 +375,7 @@ $string['static'] = 'Static';
 
 // Footer.
 $string['footersettings'] = 'Footer';
-$string['footersettingsheading'] = 'Set the content that should appear in the footer. See the layout <a href="./../theme/adaptable/pix/layout.png" target="_blank"> here</a> ';
+$string['footersettingsheading'] = 'Set the content that should appear in the footer.';
 
 $string['footerdesc'] = 'Control the content that appears in the 4 footer sections of the page.';
 
@@ -419,7 +419,7 @@ $string['navbarcachetime'] = 'Navbar cache time';
 $string['navbarcachetimedesc'] = 'The number of minutes the navigation bar is cached for.';
 
 $string['navbarmenusettings'] = 'Navbar custom menu';
-$string['navbarmenusettingsheading'] = 'Customize the menu in the navigation bar. See the layout <a href="./../theme/adaptable/pix/layout.png" target="_blank"> here</a>.';
+$string['navbarmenusettingsheading'] = 'Customize the menu in the navigation bar.';
 $string['navbarmenusettingsdesc'] = 'Allows you to add a menu to the navigation bar.';
 
 $string['navbarsettings'] = 'Navbar';
@@ -509,7 +509,6 @@ $string['navbardropdowntransitiontime'] = 'Navbar transition time';
 $string['navbardropdowntransitiontimedesc'] = 'Navbar transition effect time in seconds.  Provides a fade-in animation effect when hovering over a menu that has sub-menus.';
 
 // This Course menu.
-$string['enablemysitesdesc'] = 'Display a dropdown with the course activities and other options';
 $string['headernavbarthiscourseheading'] = 'This Course Menu';
 $string['headernavbarthiscourseheadingdesc'] = 'In this menu the student can access directly all the course activities and the participants list and their grades.';
 
@@ -574,6 +573,9 @@ $string['linkcolordesc'] = 'Set the colour of links in the theme, use html hex c
 
 $string['linkhover'] = 'Link hover colour';
 $string['linkhoverdesc'] = 'Set the colour of links (on hover) in the theme, use html hex code.';
+
+$string['dimmedtextcolor'] = 'Dimmed text colour';
+$string['dimmedtextcolordesc'] = 'The dimmed text CSS class (dimmed_text) is used by Moodle to indicate when something is disabled / not visible.  To set that colour in the theme, use html hex code.';
 
 $string['backcolor'] = 'Background colour';
 $string['backcolordesc'] = 'Set the background colour.';
@@ -725,12 +727,6 @@ $string['menuhovercolordesc'] = 'Set a main menu hover colour.';
 $string['mobilemenubkcolor'] = 'Mobile menu background colour';
 $string['mobilemenubkcolordesc'] = 'Set the main menu background colour on mobile devices (collapsed).';
 
-$string['mobileslidebartabbkcolor'] = 'Sidebar tab background colour';
-$string['mobileslidebartabbkcolordesc'] = 'The sidebar background colour on mobile devices (collapsed).';
-
-$string['mobileslidebartabiconcolor'] = 'Sidebar tab icon colour';
-$string['mobileslidebartabiconcolordesc'] = 'The sidebar icon colour on mobile devices (collapsed).';
-
 $string['selectiontext'] = 'Selection text colour';
 $string['selectiontextdesc'] = 'Set the text colour when a text in the screen is selected.';
 
@@ -741,10 +737,6 @@ $string['selectionbackgrounddesc'] = 'Set the background colour when a text in t
 $string['coursesettings'] = 'Course Formats';
 $string['coursesettingsheading'] = 'Course format settings';
 $string['coursesettingsdesc'] = 'Customize some of the most used Moodle course formats to fit the main design.';
-
-// Common settings.
-$string['showyourprogress'] = 'Show \'Your Progress\' label ';
-$string['showyourprogressdesc'] = 'Show / hide the \'Your Progress\' label in the top of the course content.  This label is only for information purposes and can be hidden.';
 
 // Course Section background color.
 $string['coursesectionbgcolor'] = 'Course section background';
@@ -819,6 +811,22 @@ $string['coursesectionactivityquizleftbordercolor'] = 'Quiz activity left border
 $string['coursesectionactivityquizleftbordercolordesc'] = 'Set the colour of the left border.';
 $string['coursesectionactivityquizbgcolor'] = 'Quiz activity background colour';
 $string['coursesectionactivityquizbgcolordesc'] = 'Set the quiz activity background colour.  Type <strong>transparent</strong> in the box for transparency.';
+
+// Course Index.
+$string['courseindexsettings'] = 'Course Index';
+$string['courseindexsettingsheading'] = 'Course index settings';
+$string['courseindexsettingsdesc'] = 'Customize the Course Index.';
+
+$string['courseindexitemcolor'] = 'Item colour';
+$string['courseindexitemcolordesc'] = 'The item colour on the \'Course Index\' in a course.';
+$string['courseindexitemhovercolor'] = 'Item hover colour';
+$string['courseindexitemhovercolordesc'] = 'The item hover colour on the \'Course Index\' in a course.';
+
+$string['courseindexpageitemcolor'] = 'Page item colour';
+$string['courseindexpageitemcolordesc'] = 'The page item colour on the \'Course Index\' in a course.';
+$string['courseindexpageitembgcolor'] = 'Page item background colour';
+$string['courseindexpageitembgcolordesc'] = 'The page item background colour on the \'Course Index\' in a course.';
+
 
 // Social Wall Settings.
 $string['socialwall'] = 'Social wall';
@@ -945,6 +953,12 @@ $string['buttoncolordesc'] = 'The colour of the main buttons used throughout the
 $string['buttonhovercolor'] = 'Button hover colour';
 $string['buttonhovercolordesc'] = 'The colour that the button changes to when hovering over the button.';
 
+$string['buttonfocuscolor'] = 'Button focus colour';
+$string['buttonfocuscolordesc'] = 'The colour that the button uses when focusing on the button.';
+
+$string['buttonfocuscoloropacity'] = 'Button focus colour opacity';
+$string['buttonfocuscoloropacitydesc'] = 'The opacity that the button uses for the colour when focusing on the button.';
+
 $string['buttontextcolor'] = 'Button text colour';
 $string['buttontextcolordesc'] = 'The colour of text used on buttons.';
 
@@ -1005,7 +1019,7 @@ $string['passwordplaceholder'] = 'Password';
 
 // Header.
 $string['headersettings'] = 'Header';
-$string['headersettingsheading'] = 'Customize the header of this theme.  See the layout \'<a href="./../theme/adaptable/pix/layout.png" target="_blank">here</a>\'.';
+$string['headersettingsheading'] = 'Customize the header of this theme.';
 $string['headerdesc'] = 'Upload your logo, set login form in header, adjust titles in header.<br />You can set font size and styles for titles in the \'<a href="./../admin/settings.php?section=theme_adaptable_font">fonts</a>\' settings page.';
 
 $string['headerbgimage'] = 'Background image';
@@ -1098,7 +1112,7 @@ $string['sitetitledefault'] = 'Use Moodle site title (site name)';
 $string['sitetitlecustom'] = 'Use custom site title (enter in the \'sitetitletext\' box below)';
 
 $string['pageheaderlayout'] = 'Header one, page header layout';
-$string['pageheaderlayoutdesc'] = 'The page header layout for header style one.  Note: \'Alternative\' is subject to change without notice and is still in development.';
+$string['pageheaderlayoutdesc'] = 'The page header layout for header style one.';
 $string['pageheaderlayouttwo'] = 'Header two, page header layout';
 $string['pageheaderlayouttwodesc'] = 'The page header layout for header style two.';
 
@@ -1116,8 +1130,6 @@ $string['displayloginbutton'] = 'Button';
 $string['displayloginbox'] = 'Login Box';
 $string['displayloginno'] = 'No Login Box';
 
-$string['hideblocks'] = 'Hide blocks';
-$string['showblocks'] = 'Show blocks';
 $string['fullscreen'] = 'Full screen';
 $string['standardview'] = 'Standard view';
 $string['sitelinkslabel'] = 'Site links';
@@ -1236,7 +1248,7 @@ $string['alertsettings'] = 'Alert Box {$a}';
 $string['alertcount'] = 'Alert count';
 $string['alertcountdesc'] = 'The number of alerts to show in the edit area below.';
 
-$string['alertsettingsheading'] = 'Customize top Alert Box. See the layout <a href="./../theme/adaptable/pix/layout.png" target="_blank"> here</a>';
+$string['alertsettingsheading'] = 'Customize top Alert Box.';
 $string['alertdesc'] = 'Enter and customize a text to be displayed in the top of the site as an alert. It is possible to set more than one alert to target different user types. You also have the option of showing alerts sitewide or on homepages only. <br /><br /><strong>Note:</strong> it is now also possible to display alerts within course pages to warn teachers that courses are hidden.';
 
 // Alerts Types.
@@ -1613,12 +1625,15 @@ $string['piwiktrackadmin'] = 'Tracking admins';
 $string['piwiktrackadmindesc'] = 'Enable tracking of admin users (not recommended).';
 
 // Custom CSS and Javascript.
-$string['customcss'] = 'Custom CSS';
-$string['customcssdesc'] = 'Whatever CSS rules you add to this textarea will be reflected in every page, making for easier customization of this theme.';
-
 $string['customcssjssettings'] = 'Custom CSS & JS';
 $string['genericsettingsheading'] = 'Apply your own modifications';
 $string['genericsettingsdescription'] = 'Here you can find various settings to add your own CSS and JavaScript code to the theme.';
+
+$string['customcss'] = 'Custom CSS';
+$string['customcssdesc'] = 'Whatever CSS rules you add to this textarea will be reflected in every page, making for easier customization of this theme.';
+
+$string['hvpcustomcss'] = 'H5P Custom CSS';
+$string['hvpcustomcssdesc'] = 'Custom CSS for the H5P module.';
 
 $string['jssection'] = 'Javascript section';
 $string['jssectiondesc'] = 'Add javascript code to the site.';
