@@ -1318,8 +1318,9 @@ function fix_utf8($value) {
             // Shortcut.
             return $value;
         }
-        // No null bytes expected in our data, so let's remove it.
-        $value = str_replace("\0", '', $value);
+
+        // Remove null bytes or invalid Unicode sequences from value.
+        $value = str_replace(["\0", "\xef\xbf\xbe", "\xef\xbf\xbf"], '', $value);
 
         // Note: this duplicates min_fix_utf8() intentionally.
         static $buggyiconv = null;
@@ -2746,7 +2747,7 @@ function require_login($courseorid = null, $autologinguest = true, $cm = null, $
 
     // If the user is not even logged in yet then make sure they are.
     if (!isloggedin()) {
-        if ($autologinguest and !empty($CFG->guestloginbutton) and !empty($CFG->autologinguests)) {
+        if ($autologinguest && !empty($CFG->autologinguests)) {
             if (!$guest = get_complete_user_data('id', $CFG->siteguest)) {
                 // Misconfigured site guest, just redirect to login page.
                 redirect(get_login_url());
@@ -5681,6 +5682,10 @@ function reset_course_userdata($data) {
             // Update calendar events for all modules.
             course_module_bulk_update_calendar_events($modname, $data->courseid);
         }
+        // Purge the course cache after resetting course start date. MDL-76936
+        if ($data->timeshift) {
+            course_modinfo::purge_course_cache($data->courseid);
+        }
     }
 
     // Mention unsupported mods.
@@ -8376,9 +8381,10 @@ function moodle_setlocale($locale='') {
  *
  * @category string
  * @param string $string The text to be searched for words. May be HTML.
+ * @param int|null $format
  * @return int The count of words in the specified string
  */
-function count_words($string) {
+function count_words($string, $format = null) {
     // Before stripping tags, add a space after the close tag of anything that is not obviously inline.
     // Also, br is a special case because it definitely delimits a word, but has no close tag.
     $string = preg_replace('~
@@ -8386,7 +8392,7 @@ function count_words($string) {
                 </                              # Start of close tag.
                 (?!                             # Do not match any of these specific close tag names.
                     a> | b> | del> | em> | i> |
-                    ins> | s> | small> |
+                    ins> | s> | small> | span> |
                     strong> | sub> | sup> | u>
                 )
                 \w+                             # But, apart from those execptions, match any tag name.
@@ -8395,6 +8401,11 @@ function count_words($string) {
                 <br> | <br\s*/>                 # Special cases that are not close tags.
             )
             ~x', '$1 ', $string); // Add a space after the close tag.
+    if ($format !== null && $format != FORMAT_PLAIN) {
+        // Match the usual text cleaning before display.
+        // Ideally we should apply multilang filter only here, other filters might add extra text.
+        $string = format_text($string, $format, ['filter' => false, 'noclean' => false, 'para' => false]);
+    }
     // Now remove HTML tags.
     $string = strip_tags($string);
     // Decode HTML entities.
@@ -8416,9 +8427,15 @@ function count_words($string) {
  *
  * @category string
  * @param string $string The text to be searched for letters. May be HTML.
+ * @param int|null $format
  * @return int The count of letters in the specified text.
  */
-function count_letters($string) {
+function count_letters($string, $format = null) {
+    if ($format !== null && $format != FORMAT_PLAIN) {
+        // Match the usual text cleaning before display.
+        // Ideally we should apply multilang filter only here, other filters might add extra text.
+        $string = format_text($string, $format, ['filter' => false, 'noclean' => false, 'para' => false]);
+    }
     $string = strip_tags($string); // Tags are out now.
     $string = html_entity_decode($string, ENT_COMPAT);
     $string = preg_replace('/[[:space:]]*/', '', $string); // Whitespace are out now.
@@ -9045,11 +9062,12 @@ function make_unique_id_code($extra = '') {
  *
  * @param string $addr    The address you are checking
  * @param string $subnetstr    The string of subnet addresses
+ * @param bool $checkallzeros    The state to whether check for 0.0.0.0
  * @return bool
  */
-function address_in_subnet($addr, $subnetstr) {
+function address_in_subnet($addr, $subnetstr, $checkallzeros = false) {
 
-    if ($addr == '0.0.0.0') {
+    if ($addr == '0.0.0.0' && !$checkallzeros) {
         return false;
     }
     $subnets = explode(',', $subnetstr);
