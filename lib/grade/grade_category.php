@@ -722,6 +722,16 @@ class grade_category extends grade_object {
 
         }
 
+        // First, check if all grades are null, because the final grade will be null
+        // even when aggreateonlygraded is true.
+        $allnull = true;
+        foreach ($grade_values as $v) {
+            if (!is_null($v)) {
+                $allnull = false;
+                break;
+            }
+        }
+
         // For items with no value, and not excluded - either set their grade to 0 or exclude them.
         foreach ($items as $itemid=>$value) {
             if (!isset($grade_values[$itemid]) and !in_array($itemid, $excluded)) {
@@ -789,9 +799,13 @@ class grade_category extends grade_object {
             $result['grademin'] = 0;
         }
 
-        // Recalculate the grade back to requested range.
-        $finalgrade = grade_grade::standardise_score($agg_grade, 0, 1, $result['grademin'], $result['grademax']);
-        $grade->finalgrade = $this->grade_item->bounded_grade($finalgrade);
+        if ($allnull) {
+            $grade->finalgrade = null;
+        } else {
+            // Recalculate the grade back to requested range.
+            $finalgrade = grade_grade::standardise_score($agg_grade, 0, 1, $result['grademin'], $result['grademax']);
+            $grade->finalgrade = $this->grade_item->bounded_grade($finalgrade);
+        }
 
         $oldrawgrademin = $grade->rawgrademin;
         $oldrawgrademax = $grade->rawgrademax;
@@ -2536,25 +2550,21 @@ class grade_category extends grade_object {
 
         $result = $this->grade_item->set_locked($lockedstate, $cascade, true);
 
-        if ($cascade) {
-            //process all children - items and categories
-            if ($children = grade_item::fetch_all(array('categoryid'=>$this->id))) {
+        // Process all children - items and categories.
+        if ($children = grade_item::fetch_all(['categoryid' => $this->id])) {
+            foreach ($children as $child) {
+                $child->set_locked($lockedstate, $cascade, false);
 
-                foreach ($children as $child) {
-                    $child->set_locked($lockedstate, true, false);
-
-                    if (empty($lockedstate) and $refresh) {
-                        //refresh when unlocking
-                        $child->refresh_grades();
-                    }
+                if (empty($lockedstate) && $refresh) {
+                    // Refresh when unlocking.
+                    $child->refresh_grades();
                 }
             }
+        }
 
-            if ($children = grade_category::fetch_all(array('parent'=>$this->id))) {
-
-                foreach ($children as $child) {
-                    $child->set_locked($lockedstate, true, true);
-                }
+        if ($children = static::fetch_all(['parent' => $this->id])) {
+            foreach ($children as $child) {
+                $child->set_locked($lockedstate, $cascade, true);
             }
         }
 
